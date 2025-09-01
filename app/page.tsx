@@ -1,152 +1,592 @@
 'use client'
 
 import { useState } from 'react'
-import Sidebar from '@/components/Sidebar'
-import MobileHeader from '@/components/MobileHeader'
-import Link from 'next/link'
+import { 
+  MagnifyingGlassIcon, 
+  BellIcon, 
+  PlusIcon,
+  ChevronDownIcon,
+  SparklesIcon,
+  BuildingOfficeIcon,
+  UsersIcon,
+  UserIcon,
+  EllipsisHorizontalIcon,
+  FireIcon,
+  StarIcon,
+  TrophyIcon
+} from '@heroicons/react/24/outline'
+import RecognitionModal from '@/components/RecognitionModal'
+import ProfileHoverCard from '@/components/ProfileHoverCard'
+import CoinDisplay from '@/components/CoinDisplay'
+// import RecognitionCard from '@/components/RecognitionCard'
+import ProfileDropdown from '@/components/ProfileDropdown'
 
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [likedPosts, setLikedPosts] = useState<string[]>([])
+  const [showRecognitionModal, setShowRecognitionModal] = useState(false)
+  const [showPostModal, setShowPostModal] = useState(false)
+
+  const toggleLike = (postId: string) => {
+    setLikedPosts(prev => 
+      prev.includes(postId) 
+        ? prev.filter(id => id !== postId)
+        : [...prev, postId]
+    )
+  }
+
+  const teamMembers = [
+    { name: 'Sarah Johnson', initials: 'SJ', color: 'bg-cherish-purple', days: 'Never' },
+    { name: 'Michael Chen', initials: 'MC', color: 'bg-cherish-orange', days: '180 days ago' },
+    { name: 'Emily Davis', initials: 'ED', color: 'bg-cherish-green', days: '335 days ago' },
+    { name: 'David Wilson', initials: 'DW', color: 'bg-cherish-red', days: 'Never' },
+    { name: 'Lisa Anderson', initials: 'LA', color: 'bg-cherish-purple-light', days: '335 days ago' }
+  ]
+
+  const celebrations = [
+    { name: 'Alex Thompson', initials: 'AT', color: 'bg-cherish-yellow', event: '4 year anniversary', date: 'Aug 16' },
+    { name: 'Jessica Martinez', initials: 'JM', color: 'bg-cherish-red', event: 'Birthday', date: 'Aug 17' },
+    { name: 'Ryan O\'Connor', initials: 'RO', color: 'bg-cherish-purple', event: 'Birthday', date: 'Aug 27' }
+  ]
+
+  const recognitionPosts = [
+    {
+      id: 'post1',
+      author: { name: 'Emma Rodriguez', initials: 'ER', color: 'bg-cherish-orange' },
+      recipients: [
+        { name: 'Alex Thompson', username: '@alex.thompson', initials: 'AT', color: 'bg-cherish-purple' },
+        { name: 'Sarah Johnson', username: '@sarah.johnson', initials: 'SJ', color: 'bg-cherish-green' },
+        { name: 'Mike Chen', username: '@mike.chen', initials: 'MC', color: 'bg-cherish-red' },
+        { name: 'Jessica Martinez', username: '@jessica.martinez', initials: 'JM', color: 'bg-cherish-yellow' },
+        { name: 'David Wilson', username: '@david.wilson', initials: 'DW', color: 'bg-cherish-purple-light' },
+        { name: 'Lisa Anderson', username: '@lisa.anderson', initials: 'LA', color: 'bg-cherish-orange-light' },
+        { name: 'Ryan O\'Connor', username: '@ryan.oconnor', initials: 'RO', color: 'bg-cherish-green-light' }
+      ],
+      amount: 9,
+      hashtags: ['work-hard-live-well'],
+      message: 'Great work in Reports as a driver for Analytics 2.0',
+      timeAgo: '8h ago',
+      likes: 12,
+      isLiked: false
+    },
+    {
+      id: 'post2',
+      author: { name: 'Thomas Evans', initials: 'TE', color: 'bg-cherish-green' },
+      recipients: [
+        { name: 'Gary Lombardo', username: '@gary.lombardo', initials: 'GL', color: 'bg-cherish-purple' }
+      ],
+      amount: 50,
+      hashtags: ['stellar-partnership'],
+      message: 'thank you for being a stellar partner and helping drive our Q4 success',
+      timeAgo: '12h ago',
+      likes: 8,
+      comments: [
+        {
+          author: { name: 'Robert Schmitt', initials: 'RS', color: 'bg-cherish-orange' },
+          message: 'Absolutely agree! Gary has been incredible.',
+          amount: 5,
+          hashtags: ['be-so-good-they-can-not-ignore-you'],
+          timeAgo: '20h ago'
+        }
+      ],
+      isLiked: false
+    },
+    {
+      id: 'post3',
+      author: { name: 'Eddie Rosado', initials: 'ER', color: 'bg-cherish-red' },
+      recipients: [
+        { name: 'Juan Moreno', username: '@juan.moreno', initials: 'JM', color: 'bg-cherish-yellow' },
+        { name: 'CJ Ziegler', username: '@cj.ziegler', initials: 'CZ', color: 'bg-cherish-green' },
+        { name: 'Zachary Schriock', username: '@zachary.schriock', initials: 'ZS', color: 'bg-cherish-purple' },
+        { name: 'Taissa Araujo', username: '@taissa.araujo', initials: 'TA', color: 'bg-cherish-orange' },
+        { name: 'Robert Schmitt', username: '@robert.schmitt', initials: 'RS', color: 'bg-cherish-red-light' },
+        { name: 'Derick Rodriguez', username: '@derick.rodriguez', initials: 'DR', color: 'bg-cherish-green-light' }
+      ],
+      amount: 10,
+      hashtags: ['be-so-good-they-can-not-ignore-you'],
+      message: 'Sooooooo good work on the new feature launch! 🚀',
+      timeAgo: '21h ago',
+      likes: 15,
+      isLiked: false
+    }
+  ]
 
   return (
-    <div className="flex h-screen bg-cherish-gray-50">
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-        isCollapsed={sidebarCollapsed}
-        onCollapsedToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
-      
-      <div className="flex-1 flex flex-col lg:ml-0">
-        <MobileHeader 
-          onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-          title="Dashboard"
-        />
-        
-        <main className="flex-1 overflow-auto">
-          <div className="p-4 lg:p-8">
-            <div className="max-w-6xl mx-auto">
-              {/* Hero Section */}
-              <div className="mb-12 hidden lg:block">
-                <div className="flex items-center space-x-6 mb-6">
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-br from-cherish-yellow to-primary-500 rounded-3xl flex items-center justify-center shadow-medium">
-                      <svg viewBox="0 0 24 24" className="w-8 h-8 text-cherish-dark" fill="currentColor">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                      </svg>
+    <div className="min-h-screen bg-gradient-to-br from-cherish-yellow-light via-white to-cherish-yellow-light">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-xl border-b border-cherish-gray-200 sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-cherish-yellow to-cherish-yellow-mono rounded-2xl flex items-center justify-center shadow-lg">
+                  <TrophyIcon className="w-6 h-6 text-cherish-dark" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-cherish-dark">ABC Organization</h1>
+                  <p className="text-xs text-cherish-gray-600">Recognition Platform</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#" className="text-cherish-dark font-semibold border-b-2 border-cherish-yellow pb-1 transition-all hover:border-cherish-yellow-mono">Home</a>
+              <a href="#" className="text-cherish-gray-600 hover:text-cherish-yellow-mono transition-colors font-medium">Rewards</a>
+              <div className="flex items-center space-x-1 text-cherish-gray-600 hover:text-cherish-yellow-mono transition-colors cursor-pointer font-medium">
+                <span>Analytics</span>
+                <ChevronDownIcon className="w-4 h-4" />
+              </div>
+            </nav>
+
+            {/* Right side */}
+            <div className="flex items-center space-x-4">
+              <button className="p-2 text-cherish-gray-600 hover:text-cherish-yellow-mono transition-colors rounded-xl hover:bg-cherish-yellow-light">
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </button>
+              <button className="p-2 text-cherish-gray-600 hover:text-cherish-orange transition-colors rounded-xl hover:bg-cherish-orange-light/20 relative">
+                <BellIcon className="w-5 h-5" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-cherish-red rounded-full animate-pulse"></div>
+              </button>
+              <ProfileDropdown />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left Sidebar */}
+          <div className="lg:col-span-1">
+            {/* Navigation Card */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
+              <div className="space-y-2">
+                <div className="flex items-center space-x-3 p-4 rounded-2xl hover:bg-gradient-to-r hover:from-cherish-yellow-light hover:to-cherish-yellow-light/50 transition-all cursor-pointer group">
+                  <BuildingOfficeIcon className="w-5 h-5 text-cherish-gray-600 group-hover:text-cherish-yellow-mono transition-colors" />
+                  <span className="font-semibold text-cherish-dark group-hover:text-cherish-yellow-mono transition-colors">Company</span>
+                </div>
+                <div className="flex items-center space-x-3 p-4 rounded-2xl bg-gradient-to-r from-cherish-yellow/20 to-cherish-yellow-mono/20 border border-cherish-yellow/30 cursor-pointer">
+                  <UsersIcon className="w-5 h-5 text-cherish-yellow-mono" />
+                  <span className="font-semibold text-cherish-yellow-mono">Team</span>
+                  <div className="ml-auto w-2 h-2 bg-cherish-yellow-mono rounded-full animate-pulse"></div>
+                </div>
+                <div className="flex items-center space-x-3 p-4 rounded-2xl hover:bg-gradient-to-r hover:from-cherish-green-light/20 hover:to-cherish-green-light/10 transition-all cursor-pointer group">
+                  <UserIcon className="w-5 h-5 text-cherish-gray-600 group-hover:text-cherish-green transition-colors" />
+                  <span className="font-semibold text-cherish-dark group-hover:text-cherish-green transition-colors">For You</span>
+                </div>
+                <div className="flex items-center space-x-3 p-4 rounded-2xl hover:bg-gradient-to-r hover:from-cherish-orange-light/20 hover:to-cherish-orange-light/10 transition-all cursor-pointer group">
+                  <PlusIcon className="w-5 h-5 text-cherish-gray-600 group-hover:text-cherish-orange transition-colors" />
+                  <span className="font-semibold text-cherish-dark group-hover:text-cherish-orange transition-colors">Add feed</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Team Recognition Card */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-cherish-gray-100">
+              <div className="flex items-center space-x-2 mb-6">
+                <FireIcon className="w-6 h-6 text-cherish-orange" />
+                <h3 className="text-xl font-bold text-cherish-dark">Your team</h3>
+              </div>
+              
+              <div className="mb-6 p-4 bg-gradient-to-r from-cherish-yellow-light to-cherish-yellow-light/50 rounded-2xl border border-cherish-yellow/20">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold text-cherish-dark">Recognition Progress</span>
+                  <span className="text-lg font-bold text-cherish-dark">0/5</span>
+                </div>
+                <div className="w-full bg-cherish-gray-200 rounded-full h-3 overflow-hidden">
+                  <div className="bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono h-3 rounded-full w-0 transition-all duration-500"></div>
+                </div>
+                <p className="text-xs text-cherish-gray-600 mt-2 flex items-center space-x-1">
+                  <StarIcon className="w-3 h-3" />
+                  <span>29 days remaining</span>
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-sm font-bold text-cherish-gray-700 uppercase tracking-wide">Team Members</h4>
+                {teamMembers.map((member, index) => (
+                  <ProfileHoverCard
+                    key={index}
+                    name={member.name}
+                    username={`@${member.name.toLowerCase().replace(' ', '.')}`}
+                    location="Remote"
+                    department="Engineering"
+                    avatar={member.color}
+                    stats={{ given: 0, received: 1 }}
+                  >
+                    <div className="flex items-center space-x-3 p-3 rounded-2xl hover:bg-cherish-gray-50 transition-all cursor-pointer group">
+                      <div className={`w-12 h-12 ${member.color} rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform`}>
+                        {member.initials}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-cherish-dark text-sm group-hover:text-cherish-yellow-mono transition-colors">{member.name}</p>
+                        <p className="text-xs text-cherish-gray-500">{member.days}</p>
+                      </div>
+                      <button className="p-2 text-cherish-gray-400 hover:text-cherish-yellow-mono transition-colors rounded-xl hover:bg-cherish-yellow-light">
+                        <SparklesIcon className="w-4 h-4" />
+                      </button>
                     </div>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-cherish-yellow rounded-full animate-pulse"></div>
+                  </ProfileHoverCard>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Main Feed */}
+          <div className="lg:col-span-2">
+            {/* Post Creation */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-8 border border-cherish-gray-100">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-cherish-purple to-cherish-purple-light rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
+                  BC
+                </div>
+                <div className="flex-1">
+                  <button 
+                    onClick={() => setShowPostModal(true)}
+                    className="w-full bg-cherish-gray-50 hover:bg-cherish-gray-100 border-0 rounded-2xl px-6 py-4 text-cherish-gray-600 hover:text-cherish-dark focus:outline-none focus:ring-2 focus:ring-cherish-yellow transition-all text-left"
+                  >
+                    Start a post... ✨
+                  </button>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CoinDisplay amount={427} type="coin" size="md" animated />
+                  <button 
+                    onClick={() => setShowRecognitionModal(true)}
+                    className="bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono hover:from-cherish-yellow-mono hover:to-cherish-yellow text-cherish-dark px-6 py-3 rounded-2xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    Give recognition
+                  </button>
+                </div>
+              </div>
                   </div>
-                  <div>
-                    <h1 className="text-4xl font-bold text-cherish-dark mb-2">
-                      Welcome to Cherish
-                    </h1>
-                    <p className="text-xl text-cherish-gray-600">
-                      Your modern employee recognition platform
-                    </p>
+
+            {/* Moments in motion */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-8 border border-cherish-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-cherish-orange to-cherish-orange-light rounded-2xl flex items-center justify-center">
+                    <SparklesIcon className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-cherish-dark">Moments in motion</h3>
+                </div>
+                <ChevronDownIcon className="w-5 h-5 text-cherish-gray-400 hover:text-cherish-orange transition-colors cursor-pointer" />
+              </div>
+            </div>
+
+            {/* Feed Posts */}
+            <div className="space-y-8">
+              {recognitionPosts.map((post) => (
+                <div key={post.id} className="bg-white rounded-3xl shadow-lg p-6">
+                  {/* Author and Recipients */}
+                  <div className="flex items-start space-x-3 mb-4">
+                    <ProfileHoverCard
+                      name={post.author.name}
+                      username={`@${post.author.name.toLowerCase().replace(' ', '.')}`}
+                      location="Remote"
+                      department="Engineering"
+                      avatar={post.author.color}
+                      stats={{ given: 15, received: 8 }}
+                    >
+                      <div className={`w-12 h-12 ${post.author.color} rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg cursor-pointer hover:scale-110 transition-transform flex-shrink-0`}>
+                        {post.author.initials}
+                      </div>
+                    </ProfileHoverCard>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center flex-wrap gap-2 mb-2">
+                        <ProfileHoverCard
+                          name={post.author.name}
+                          username={`@${post.author.name.toLowerCase().replace(' ', '.')}`}
+                          location="Remote"
+                          department="Engineering"
+                          avatar={post.author.color}
+                          stats={{ given: 15, received: 8 }}
+                        >
+                          <span className="font-bold text-cherish-dark hover:text-cherish-yellow-mono cursor-pointer transition-colors">
+                            {post.author.name}
+                          </span>
+                        </ProfileHoverCard>
+                        <span className="text-cherish-gray-500 text-sm">gave recognition to</span>
+                        <div className="flex items-center space-x-1 flex-shrink-0">
+                          {post.recipients.slice(0, 3).map((recipient, idx) => (
+                            <ProfileHoverCard
+                              key={idx}
+                              name={recipient.name}
+                              username={recipient.username}
+                              location="Remote"
+                              department="Engineering"
+                              avatar={recipient.color}
+                              stats={{ given: 8, received: 12 }}
+                            >
+                              <div className={`w-8 h-8 ${recipient.color} rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-md cursor-pointer hover:scale-110 transition-transform`}>
+                                {recipient.initials}
+                              </div>
+                            </ProfileHoverCard>
+                          ))}
+                          {post.recipients.length > 3 && (
+                            <div className="w-8 h-8 bg-cherish-gray-200 rounded-xl flex items-center justify-center text-cherish-gray-600 font-bold text-xs">
+                              +{post.recipients.length - 3}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-sm">
+                        {post.recipients.map((recipient, idx) => (
+                          <ProfileHoverCard
+                            key={idx}
+                            name={recipient.name}
+                            username={recipient.username}
+                            location="Remote"
+                            department="Engineering"
+                            avatar={recipient.color}
+                            stats={{ given: 8, received: 12 }}
+                          >
+                            <span className="inline-block bg-cherish-yellow-light text-cherish-yellow-dark px-2 py-1 rounded-md border border-cherish-yellow-dark/30 hover:bg-cherish-yellow-mono hover:text-white cursor-pointer transition-all duration-200 text-xs font-medium">
+                              {recipient.username}
+                            </span>
+                          </ProfileHoverCard>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <p className="text-cherish-dark font-medium mb-4 text-lg leading-relaxed">
+                    {post.message}
+                  </p>
+
+                  {/* Amount and Hashtags */}
+                  <div className="flex items-center flex-wrap gap-2 mb-4">
+                    <span className="bg-cherish-green text-white px-3 py-1 rounded-full text-sm font-semibold">+{post.amount}</span>
+                    {post.hashtags.map((tag, idx) => (
+                      <span key={idx} className="bg-cherish-gray-100 text-cherish-gray-700 px-3 py-1 rounded-full text-sm font-medium border border-cherish-gray-300">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Comments Section */}
+                  {post.comments && post.comments.length > 0 && (
+                    <div className="mb-4 pl-4 border-l-2 border-cherish-gray-100">
+                      {post.comments.map((comment, idx) => (
+                        <div key={idx} className="flex items-start space-x-3 mb-3">
+                          <ProfileHoverCard
+                            name={comment.author.name}
+                            username={`@${comment.author.name.toLowerCase().replace(' ', '.')}`}
+                            location="Remote"
+                            department="Engineering"
+                            avatar={comment.author.color}
+                            stats={{ given: 8, received: 5 }}
+                          >
+                            <div className={`w-8 h-8 ${comment.author.color} rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-md cursor-pointer hover:scale-110 transition-transform flex-shrink-0`}>
+                              {comment.author.initials}
+                            </div>
+                          </ProfileHoverCard>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <ProfileHoverCard
+                                name={comment.author.name}
+                                username={`@${comment.author.name.toLowerCase().replace(' ', '.')}`}
+                                location="Remote"
+                                department="Engineering"
+                                avatar={comment.author.color}
+                                stats={{ given: 8, received: 5 }}
+                              >
+                                <span className="font-semibold text-cherish-dark hover:text-cherish-yellow-mono cursor-pointer transition-colors text-sm">
+                                  {comment.author.name}
+                                </span>
+                              </ProfileHoverCard>
+                              <span className="text-cherish-gray-500 text-xs">{comment.timeAgo}</span>
+                            </div>
+                            <p className="text-cherish-dark text-sm mb-2">{comment.message}</p>
+                            <div className="flex items-center flex-wrap gap-2">
+                              <span className="bg-cherish-green text-white px-2 py-1 rounded-full text-xs font-semibold">+{comment.amount}</span>
+                              {comment.hashtags.map((tag, tagIdx) => (
+                                <span key={tagIdx} className="bg-cherish-gray-100 text-cherish-gray-700 px-2 py-1 rounded-full text-xs font-medium border border-cherish-gray-300">
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Time and Actions */}
+                  <div className="flex items-center justify-between pt-4 border-t border-cherish-gray-100">
+                    <p className="text-cherish-gray-500 text-sm">{post.timeAgo}</p>
+                    <div className="flex items-center space-x-4">
+                      <button className="flex items-center space-x-1 text-cherish-gray-500 hover:text-cherish-red transition-colors">
+                        <span className="text-sm">♥</span>
+                        <span className="text-sm">{post.likes}</span>
+                      </button>
+                      <button className="flex items-center space-x-1 text-cherish-gray-500 hover:text-cherish-blue transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        <span className="text-sm">Comment</span>
+                      </button>
+                      <button className="flex items-center space-x-1 text-cherish-gray-500 hover:text-cherish-green transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        <span className="text-sm">Add-on</span>
+                      </button>
+                      <button className="text-cherish-gray-500 hover:text-cherish-yellow-mono transition-colors">
+                        <EllipsisHorizontalIcon className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="lg:col-span-1">
+            {/* Rewards */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-cherish-dark">Rewards</h3>
+                <CoinDisplay amount={2524} type="cart" size="lg" animated />
+              </div>
+
+              <div className="flex items-center justify-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-cherish-green-light/20 to-cherish-green/20 rounded-3xl flex items-center justify-center border-2 border-cherish-green/20">
+                  <div className="w-10 h-10 bg-gradient-to-br from-cherish-green to-cherish-green-light rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
+                    +10
+                  </div>
+                </div>
+                <div className="w-16 h-16 bg-gradient-to-br from-cherish-red-light/20 to-cherish-red/20 rounded-3xl flex items-center justify-center border-2 border-cherish-red/20">
+                  <div className="w-10 h-10 bg-gradient-to-br from-cherish-red to-cherish-red-light rounded-2xl flex items-center justify-center shadow-lg">
+                    <SparklesIcon className="w-5 h-5 text-white" />
                   </div>
                 </div>
               </div>
-
-              {/* Getting Started Card */}
-              <div className="settings-card mb-8">
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="w-12 h-12 bg-cherish-yellow rounded-2xl flex items-center justify-center shadow-soft">
-                    <svg viewBox="0 0 24 24" className="w-6 h-6 text-cherish-dark" fill="currentColor">
-                      <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="settings-subheader mb-1">
-                      Getting Started
-                    </h2>
-                    <p className="text-sm text-cherish-gray-600">Set up your platform for success</p>
-                  </div>
+              
+              <button className="w-full bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono hover:from-cherish-yellow-mono hover:to-cherish-yellow text-cherish-dark font-bold py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                🛍️ Shop rewards
+              </button>
                 </div>
 
-                <div className="bg-gradient-to-br from-cherish-yellow-light to-white p-8 rounded-3xl border border-cherish-yellow mb-8">
-                  <div className="flex items-start space-x-6">
-                    <div className="w-16 h-16 bg-cherish-yellow rounded-2xl flex items-center justify-center shadow-soft flex-shrink-0">
-                      <svg viewBox="0 0 24 24" className="w-8 h-8 text-cherish-dark" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                      </svg>
+            {/* Celebrations */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-cherish-dark">🎉 Celebrations</h3>
+                <button className="text-cherish-gray-400 hover:text-cherish-orange transition-colors p-2 rounded-xl hover:bg-cherish-gray-100">
+                  <EllipsisHorizontalIcon className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <p className="text-sm font-bold text-cherish-gray-700 uppercase tracking-wide">Recent</p>
+                {celebrations.map((celebration, index) => (
+                  <ProfileHoverCard
+                    key={index}
+                    name={celebration.name}
+                    username={`@${celebration.name.toLowerCase().replace(' ', '.')}`}
+                    location="San Francisco"
+                    department="Product"
+                    avatar={celebration.color}
+                    stats={{ given: 3, received: 7 }}
+                  >
+                    <div className="flex items-center space-x-3 p-3 rounded-2xl hover:bg-cherish-gray-50 transition-all cursor-pointer group">
+                      <div className={`w-12 h-12 ${celebration.color} rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-110 transition-transform`}>
+                        {celebration.initials}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-cherish-dark mb-4">
-                        Configure Your Account
-                      </h3>
-                      <p className="text-cherish-gray-700 mb-6 leading-relaxed text-lg">
-                        Welcome to your employee recognition platform! Get started by configuring your account settings, customizing your interface, and setting up email templates to create an engaging experience for your team.
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <Link
-                          href="/company/account-settings"
-                          className="btn-primary inline-flex items-center justify-center"
-                        >
-                          <span className="flex items-center space-x-2">
-                            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                              <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
-                            </svg>
-                            <span>Configure Account Settings</span>
-                          </span>
-                        </Link>
-                        <button className="btn-secondary">
-                          <span className="flex items-center space-x-2">
-                            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                              <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"/>
-                            </svg>
-                            <span>Watch Tutorial</span>
-                          </span>
-                        </button>
+                        <p className="font-semibold text-cherish-dark text-sm group-hover:text-cherish-yellow-mono transition-colors">{celebration.name}</p>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-cherish-red rounded-full animate-pulse"></div>
+                          <p className="text-xs text-cherish-gray-600">{celebration.event} on {celebration.date}</p>
+                        </div>
                       </div>
                     </div>
+                  </ProfileHoverCard>
+                ))}
+                
+                <button className="w-full text-center text-sm text-cherish-yellow-mono hover:text-cherish-yellow transition-colors py-3 font-semibold">
+                  Explore all this month →
+                </button>
                   </div>
                 </div>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white p-6 rounded-2xl border border-cherish-gray-200 shadow-soft hover:shadow-medium transition-all duration-300">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-blue-600" fill="currentColor">
-                          <path d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"/>
-                        </svg>
-                      </div>
-                      <h3 className="font-semibold text-cherish-dark">Analytics</h3>
+            {/* Trending */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-cherish-gray-100">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-cherish-dark">📈 Trending</h3>
+                <button className="text-cherish-gray-400 hover:text-cherish-green transition-colors p-2 rounded-xl hover:bg-cherish-gray-100">
+                  <EllipsisHorizontalIcon className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm font-bold text-cherish-gray-700 uppercase tracking-wide mb-4">Company values</p>
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-2xl bg-gradient-to-r from-cherish-yellow/10 to-cherish-yellow-mono/10 border border-cherish-yellow/20">
+                      <span className="text-cherish-yellow-mono font-semibold text-sm">#be-so-good-they-can-not-ignore-you</span>
+                      <p className="text-xs text-cherish-gray-600 mt-1">593 mentions</p>
                     </div>
-                    <p className="text-sm text-cherish-gray-600">Track recognition trends and employee engagement metrics</p>
+                    
+                    <div className="p-3 rounded-2xl bg-gradient-to-r from-cherish-green/10 to-cherish-green-light/10 border border-cherish-green/20">
+                      <span className="text-cherish-green font-semibold text-sm">#its-us-vs-the-problem</span>
+                      <p className="text-xs text-cherish-gray-600 mt-1">415 mentions</p>
+                      </div>
+                    
+                    <div className="p-3 rounded-2xl bg-gradient-to-r from-cherish-orange/10 to-cherish-orange-light/10 border border-cherish-orange/20">
+                      <span className="text-cherish-orange font-semibold text-sm">#work-hard-live-well</span>
+                      <p className="text-xs text-cherish-gray-600 mt-1">412 mentions</p>
+                    </div>
                   </div>
 
-                  <div className="bg-white p-6 rounded-2xl border border-cherish-gray-200 shadow-soft hover:shadow-medium transition-all duration-300">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-green-600" fill="currentColor">
-                          <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6Z"/>
-                        </svg>
+                  <button className="w-full text-center text-sm text-cherish-yellow-mono hover:text-cherish-yellow transition-colors py-3 mt-4 font-semibold">
+                    Show more ↓
+                  </button>
                       </div>
-                      <h3 className="font-semibold text-cherish-dark">Team</h3>
+                
+                <div className="border-t border-cherish-gray-200 pt-6">
+                  <p className="text-sm font-bold text-cherish-gray-700 uppercase tracking-wide mb-4">Custom tags</p>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-cherish-gray-50 transition-colors">
+                      <span className="text-cherish-yellow-mono font-medium text-sm">#teamwork</span>
+                      <span className="text-xs text-cherish-gray-500 bg-cherish-gray-100 px-2 py-1 rounded-full">14</span>
                     </div>
-                    <p className="text-sm text-cherish-gray-600">Manage users, departments, and recognition permissions</p>
+                    
+                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-cherish-gray-50 transition-colors">
+                      <span className="text-cherish-green font-medium text-sm">#better-together</span>
+                      <span className="text-xs text-cherish-gray-500 bg-cherish-gray-100 px-2 py-1 rounded-full">10</span>
                   </div>
 
-                  <div className="bg-white p-6 rounded-2xl border border-cherish-gray-200 shadow-soft hover:shadow-medium transition-all duration-300">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-cherish-yellow-light rounded-xl flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-cherish-yellow-mono" fill="currentColor">
-                          <path d="M5,9V21H1V9H5M9,21A2,2 0 0,1 7,19V9C7,8.45 7.22,7.95 7.59,7.59L14.17,1L15.23,2.06C15.5,2.33 15.67,2.7 15.67,3.11L15.64,3.43L14.69,8H21C21.83,8 22.54,8.5 22.84,9.22C23.03,9.64 23.03,10.14 22.84,10.56L19.84,17.47C19.54,18.19 18.83,18.69 18,18.69H9.69C9.31,18.69 8.95,18.56 8.65,18.26L7,16.61V21A2,2 0 0,1 9,21Z"/>
-                        </svg>
-                      </div>
-                      <h3 className="font-semibold text-cherish-dark">Recognition</h3>
+                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-cherish-gray-50 transition-colors">
+                      <span className="text-cherish-orange font-medium text-sm">#volunteer-day</span>
+                      <span className="text-xs text-cherish-gray-500 bg-cherish-gray-100 px-2 py-1 rounded-full">8</span>
                     </div>
-                    <p className="text-sm text-cherish-gray-600">View and manage employee recognition posts and rewards</p>
                   </div>
+                  
+                  <button className="w-full text-center text-sm text-cherish-green hover:text-cherish-green-light transition-colors py-3 mt-4 font-semibold">
+                    Show more ↓
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
+
+      {/* Modals */}
+      <RecognitionModal 
+        isOpen={showRecognitionModal} 
+        onClose={() => setShowRecognitionModal(false)} 
+        availablePoints={427}
+      />
+      
+      <RecognitionModal 
+        isOpen={showPostModal} 
+        onClose={() => setShowPostModal(false)} 
+        availablePoints={427}
+      />
     </div>
   )
 }

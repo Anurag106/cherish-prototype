@@ -38,7 +38,7 @@ const menuItems: MenuItem[] = [
   {
     id: 'dashboard',
     name: 'Dashboard',
-    href: '/',
+    href: '/admin',
     icon: ChartBarIcon,
   },
   {
@@ -146,20 +146,20 @@ export default function Sidebar({ isOpen = true, onToggle, isCollapsed = false, 
 
     if (hasChildren) {
       return (
-        <div key={item.id} className="mb-2">
+        <div key={item.id} className="mb-1">
           <div className="relative group">
             <button
               onClick={() => !isCollapsed && toggleExpanded(item.id)}
-              className={`sidebar-item group w-full text-left ${depth > 0 && !isCollapsed ? 'pl-12' : ''} ${isCollapsed ? 'justify-center px-0' : ''}`}
+              className={`sidebar-item group w-full text-left ${depth > 0 && !isCollapsed ? 'pl-10' : ''} ${isCollapsed ? 'justify-center px-0' : ''}`}
             >
               <item.icon className={`sidebar-icon ${isCollapsed ? 'mx-auto' : 'mr-3'} group-hover:text-white`} />
               {!isCollapsed && (
                 <>
-                  <span className="flex-1 font-medium">{item.name}</span>
+                  <span className="flex-1">{item.name}</span>
                   {isExpanded ? (
-                    <ChevronDownIcon className="h-4 w-4 text-cherish-yellow-mono group-hover:text-white transition-transform duration-300" />
+                    <ChevronDownIcon className="h-4 w-4 text-cherish-yellow-mono group-hover:text-white transition-transform duration-200" />
                   ) : (
-                    <ChevronRightIcon className="h-4 w-4 text-cherish-yellow-mono group-hover:text-white transition-transform duration-300" />
+                    <ChevronRightIcon className="h-4 w-4 text-cherish-yellow-mono group-hover:text-white transition-transform duration-200" />
                   )}
                 </>
               )}
@@ -167,15 +167,14 @@ export default function Sidebar({ isOpen = true, onToggle, isCollapsed = false, 
             
             {/* Tooltip for collapsed state */}
             {isCollapsed && (
-              <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 px-2 py-1 bg-cherish-dark text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+              <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 px-2 py-1 bg-cherish-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                 {item.name}
-                <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-transparent border-b-transparent border-l-transparent border-r-cherish-dark border-2"></div>
               </div>
             )}
           </div>
           
           {!isCollapsed && isExpanded && item.children && (
-            <div className="mt-2 space-y-1">
+            <div className="mt-1 space-y-1 ml-2">
               {item.children.map(child => renderMenuItem(child, depth + 1))}
             </div>
           )}
@@ -184,22 +183,21 @@ export default function Sidebar({ isOpen = true, onToggle, isCollapsed = false, 
     }
 
     return (
-      <div key={item.id} className="relative group mb-2">
+      <div key={item.id} className="relative group mb-1">
         <Link
           href={item.href || '#'}
           className={`sidebar-item group block ${
             itemIsActive ? 'active' : ''
-          } ${depth > 0 && !isCollapsed ? 'pl-12' : ''} ${isCollapsed ? 'justify-center px-0' : ''}`}
+          } ${depth > 0 && !isCollapsed ? 'pl-10' : ''} ${isCollapsed ? 'justify-center px-0' : ''}`}
         >
           <item.icon className={`sidebar-icon ${isCollapsed ? 'mx-auto' : 'mr-3'} group-hover:text-white group-active:text-cherish-dark`} />
-          {!isCollapsed && <span className="font-medium">{item.name}</span>}
+          {!isCollapsed && <span>{item.name}</span>}
         </Link>
         
         {/* Tooltip for collapsed state */}
         {isCollapsed && (
-          <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 px-2 py-1 bg-cherish-dark text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+          <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 px-2 py-1 bg-cherish-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
             {item.name}
-            <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-transparent border-b-transparent border-l-transparent border-r-cherish-dark border-2"></div>
           </div>
         )}
       </div>
@@ -272,17 +270,17 @@ export default function Sidebar({ isOpen = true, onToggle, isCollapsed = false, 
         </div>
 
         {/* Admin Badge */}
-        <div className={`${isCollapsed ? 'px-3' : 'px-6'} py-4 bg-cherish-gray-800/30 transition-all duration-300`}>
+        <div className={`${isCollapsed ? 'px-3' : 'px-6'} py-3 bg-cherish-gray-800/20 transition-all duration-300`}>
           <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-2'}`}>
-            <div className="w-2 h-2 bg-cherish-yellow-mono rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-cherish-yellow rounded-full"></div>
             {!isCollapsed && (
-              <span className="text-sidebar-text text-xs font-semibold uppercase tracking-wider">Admin Panel</span>
+              <span className="text-sidebar-text text-xs font-medium uppercase tracking-wide">Admin Panel</span>
             )}
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-3'} py-6 overflow-y-auto transition-all duration-300`}>
+        <nav className={`sidebar-nav flex-1 ${isCollapsed ? 'px-2' : 'px-3'} py-4 overflow-y-auto transition-all duration-300`}>
           <div className="space-y-1">
             {menuItems.map(item => renderMenuItem(item))}
           </div>
