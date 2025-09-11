@@ -52,7 +52,7 @@ export default function SecurityLogin() {
         <div className="space-y-8">
           <div>
             <h3 className="settings-subheader">
-              Login to 'app.cherishly.com'
+              Login to &apos;app.cherishly.com&apos;
             </h3>
 
             <div className="space-y-6">

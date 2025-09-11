@@ -351,7 +351,7 @@ export default function EmailCustomization() {
                 <div className={`w-3 h-3 rounded-full ${emailSettings.birthdayReminders ? 'bg-cherish-yellow-mono' : 'bg-cherish-gray-300'}`}></div>
                 <div>
                   <div className="font-semibold text-cherish-dark">Birthday Reminders</div>
-                  <div className="text-sm text-cherish-gray-600">Celebrate team members' birthdays</div>
+                  <div className="text-sm text-cherish-gray-600">Celebrate team members&apos; birthdays</div>
                 </div>
               </div>
               <Toggle

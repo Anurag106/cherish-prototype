@@ -24,6 +24,10 @@ import {
   XMarkIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  HeartIcon,
+  ExclamationTriangleIcon,
+  ClipboardDocumentListIcon,
+  FlagIcon,
 } from '@heroicons/react/24/outline'
 
 interface MenuItem {
@@ -93,8 +97,33 @@ const menuItems: MenuItem[] = [
   {
     id: 'recognition',
     name: 'Recognition',
-    href: '/recognition',
     icon: TrophyIcon,
+    children: [
+      {
+        id: 'peer-to-peer',
+        name: 'Peer to Peer',
+        href: '/recognition/peer-to-peer',
+        icon: HeartIcon,
+      },
+      {
+        id: 'celebration-awards',
+        name: 'Celebration, Awards, Incentives',
+        href: '/recognition/celebration-awards',
+        icon: GiftIcon,
+      },
+      {
+        id: 'pending-approval',
+        name: 'Pending Approval',
+        href: '/recognition/pending-approval',
+        icon: ClipboardDocumentListIcon,
+      },
+      {
+        id: 'reported',
+        name: 'Reported',
+        href: '/recognition/reported',
+        icon: FlagIcon,
+      },
+    ],
   },
   {
     id: 'reports',
@@ -125,7 +154,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen = true, onToggle, isCollapsed = false, onCollapsedToggle }: SidebarProps) {
   const pathname = usePathname()
-  const [expandedItems, setExpandedItems] = useState<string[]>(['company'])
+  const [expandedItems, setExpandedItems] = useState<string[]>(['company', 'recognition'])
 
   const toggleExpanded = (itemId: string) => {
     setExpandedItems(prev =>
