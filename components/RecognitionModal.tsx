@@ -87,59 +87,6 @@ export default function RecognitionModal({ isOpen, onClose, availablePoints }: R
 
                 {/* Form */}
                 <div className="p-6 space-y-6">
-                  {/* Input Fields Row */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Recipient */}
-                    <div className="space-y-2">
-                      <label className="flex items-center space-x-2 text-sm font-semibold text-cherish-gray-700">
-                        <UserIcon className="w-4 h-4" />
-                        <span>Recipient</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={recipient}
-                          onChange={(e) => setRecipient(e.target.value)}
-                          placeholder="@username"
-                          className="w-full px-4 py-3 bg-cherish-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-cherish-yellow transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Amount */}
-                    <div className="space-y-2">
-                      <label className="flex items-center space-x-2 text-sm font-semibold text-cherish-gray-700">
-                        <PlusIcon className="w-4 h-4" />
-                        <span>Amount</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={amount}
-                          onChange={(e) => setAmount(e.target.value)}
-                          placeholder="+10"
-                          className="w-full px-4 py-3 bg-cherish-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-cherish-yellow transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Hashtag */}
-                    <div className="space-y-2">
-                      <label className="flex items-center space-x-2 text-sm font-semibold text-cherish-gray-700">
-                        <HashtagIcon className="w-4 h-4" />
-                        <span>Hashtag</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={hashtag}
-                          onChange={(e) => setHashtag(e.target.value)}
-                          placeholder="#teamwork"
-                          className="w-full px-4 py-3 bg-cherish-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-cherish-yellow transition-all"
-                        />
-                      </div>
-                    </div>
-                  </div>
 
                   {/* Visibility Options */}
                   <div className="space-y-3">
@@ -215,9 +162,9 @@ export default function RecognitionModal({ isOpen, onClose, availablePoints }: R
                     
                     <button
                       onClick={handleSubmit}
-                      className="bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono hover:from-cherish-yellow-mono hover:to-cherish-yellow text-cherish-dark font-bold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                      className="bg-cherish-yellow-light hover:shadow-lg text-cherish-yellow-dark font-medium px-8 py-3 rounded-lg border-2 border-cherish-yellow-dark transition-all duration-200"
                     >
-                      Give recognition
+                      🏆 Give recognition
                     </button>
                   </div>
                 </div>

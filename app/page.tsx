@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
 import { 
   MagnifyingGlassIcon, 
   BellIcon, 
@@ -11,20 +12,86 @@ import {
   UsersIcon,
   UserIcon,
   EllipsisHorizontalIcon,
+  InformationCircleIcon,
   FireIcon,
   StarIcon,
-  TrophyIcon
+  TrophyIcon,
+  XMarkIcon,
+  LinkIcon,
+  FlagIcon,
+  ChartBarIcon,
+  ClipboardDocumentListIcon,
+  UserGroupIcon,
+  ChartPieIcon,
+  HashtagIcon
 } from '@heroicons/react/24/outline'
 import RecognitionModal from '@/components/RecognitionModal'
 import ProfileHoverCard from '@/components/ProfileHoverCard'
 import CoinDisplay from '@/components/CoinDisplay'
-// import RecognitionCard from '@/components/RecognitionCard'
 import ProfileDropdown from '@/components/ProfileDropdown'
+import BookmarksPage from '@/components/pages/BookmarksPage'
+import AnnouncementsPage from '@/components/pages/AnnouncementsPage'
+import ViewProfilePage from '@/components/pages/ViewProfilePage'
+import ProfileSettingsPage from '@/components/pages/ProfileSettingsPage'
+import AddFeedModal from '@/components/AddFeedModal'
+import MomentsInMotion from '@/components/MomentsInMotion'
+import Tooltip from '@/components/Tooltip'
+import { NotificationProvider, useNotifications } from '@/components/NotificationSystem'
+// Removed OrganizationGraphPage import - now using proper routing
 
-export default function Home() {
+function HomeContent() {
+  const { showSuccess, showInfo } = useNotifications()
   const [likedPosts, setLikedPosts] = useState<string[]>([])
   const [showRecognitionModal, setShowRecognitionModal] = useState(false)
   const [showPostModal, setShowPostModal] = useState(false)
+  const [showAddFeedModal, setShowAddFeedModal] = useState(false)
+  const [currentPage, setCurrentPage] = useState<string>('feed')
+  const [showAllowanceBanner, setShowAllowanceBanner] = useState(true)
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
+  const [activeFeeds, setActiveFeeds] = useState<Array<{type: string, id: string, name: string}>>([
+    { type: 'locations', id: 'atlanta', name: 'Atlanta' },
+    { type: 'teams', id: 'adam-harrington', name: "Adam Harrington's Team" }
+  ])
+
+  // Analytics menu items
+  const analyticsMenuItems = [
+    { id: 'team-dashboard', name: 'Team dashboard', icon: ChartBarIcon },
+    { id: 'leaderboard', name: 'Leaderboard', icon: TrophyIcon },
+    { id: 'participation', name: 'Participation', icon: UserGroupIcon },
+    { id: 'recognition', name: 'Recognition', icon: StarIcon },
+    { id: 'organization-graph', name: 'Organization graph', icon: ChartPieIcon },
+    { id: 'top-words', name: 'Top words', icon: HashtagIcon }
+  ]
+
+  const handleAnalyticsNavigation = (analyticsType: string) => {
+    console.log('Navigating to analytics:', analyticsType)
+    if (analyticsType === 'organization-graph') {
+      window.location.href = '/recognition-analytics/organization-graph'
+    } else if (analyticsType === 'recognition') {
+      window.location.href = '/recognition-analytics'
+    } else if (analyticsType === 'top-words') {
+      window.location.href = '/top-words'
+    } else if (analyticsType === 'participation') {
+      window.location.href = '/participation'
+    } else if (analyticsType === 'team-dashboard') {
+      window.location.href = '/recognition-analytics/team-dashboard'
+    } else if (analyticsType === 'leaderboard') {
+      window.location.href = '/recognition-analytics/leaderboards'
+    }
+  }
+
+  const handleNavigation = (page: string) => {
+    if (page === 'logout') {
+      // Handle logout logic here
+      console.log('Logging out...')
+      return
+    }
+    setCurrentPage(page)
+  }
+
+  const handleBackToFeed = () => {
+    setCurrentPage('feed')
+  }
 
   const toggleLike = (postId: string) => {
     setLikedPosts(prev => 
@@ -33,6 +100,55 @@ export default function Home() {
         : [...prev, postId]
     )
   }
+
+  const handleAddFeed = (feedType: string, feedId: string, feedName: string) => {
+    const newFeed = { type: feedType, id: feedId, name: feedName }
+    setActiveFeeds(prev => {
+      // Check if feed already exists
+      const exists = prev.some(feed => feed.type === feedType && feed.id === feedId)
+      if (exists) return prev
+      return [...prev, newFeed]
+    })
+  }
+
+  const handleRemoveFeed = (feedType: string, feedId: string) => {
+    setActiveFeeds(prev => prev.filter(feed => !(feed.type === feedType && feed.id === feedId)))
+  }
+
+  const handleDropdownToggle = (postId: string) => {
+    setOpenDropdownId(openDropdownId === postId ? null : postId)
+  }
+
+  const handleCopyLink = (postId: string) => {
+    const postUrl = `${window.location.origin}/post/${postId}`
+    navigator.clipboard.writeText(postUrl).then(() => {
+      showSuccess('Link copied!', 'Post link has been copied to your clipboard.')
+    }).catch(err => {
+      console.error('Failed to copy link: ', err)
+      showInfo('Copy failed', 'Unable to copy link to clipboard. Please try again.')
+    })
+    setOpenDropdownId(null)
+  }
+
+  const handleReport = (postId: string) => {
+    console.log('Reporting post:', postId)
+    showInfo('Report submitted', 'Thank you for reporting this post. Our team will review it shortly.')
+    setOpenDropdownId(null)
+  }
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdownId && !(event.target as Element).closest('.relative')) {
+        setOpenDropdownId(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [openDropdownId])
 
   const teamMembers = [
     { name: 'Sarah Johnson', initials: 'SJ', color: 'bg-cherish-purple', days: 'Never' },
@@ -110,6 +226,25 @@ export default function Home() {
     }
   ]
 
+  // Render different pages based on currentPage state
+  if (currentPage === 'bookmarks') {
+    return <BookmarksPage onBack={handleBackToFeed} />
+  }
+  
+  if (currentPage === 'announcements') {
+    return <AnnouncementsPage onBack={handleBackToFeed} />
+  }
+  
+  if (currentPage === 'profile') {
+    return <ViewProfilePage onBack={handleBackToFeed} />
+  }
+  
+  if (currentPage === 'profile-settings') {
+    return <ProfileSettingsPage onBack={handleBackToFeed} />
+  }
+
+  // Organization graph now handled by standalone route /recognition-analytics/organization-graph
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cherish-yellow-light via-white to-cherish-yellow-light">
       {/* Header */}
@@ -133,10 +268,46 @@ export default function Home() {
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#" className="text-cherish-dark font-semibold border-b-2 border-cherish-yellow pb-1 transition-all hover:border-cherish-yellow-mono">Home</a>
               <a href="#" className="text-cherish-gray-600 hover:text-cherish-yellow-mono transition-colors font-medium">Rewards</a>
-              <div className="flex items-center space-x-1 text-cherish-gray-600 hover:text-cherish-yellow-mono transition-colors cursor-pointer font-medium">
-                <span>Analytics</span>
-                <ChevronDownIcon className="w-4 h-4" />
-              </div>
+              
+              {/* Analytics Dropdown */}
+              <Menu as="div" className="relative inline-block text-left">
+                <div>
+                  <Menu.Button className="flex items-center space-x-1 text-cherish-gray-600 hover:text-cherish-yellow-mono transition-colors cursor-pointer font-medium">
+                    <span>Analytics</span>
+                    <ChevronDownIcon className="w-4 h-4" />
+                  </Menu.Button>
+                </div>
+
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="absolute left-0 mt-2 w-56 origin-top-left divide-y divide-cherish-gray-100 rounded-2xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-cherish-gray-200 z-50">
+                    <div className="py-2">
+                      {analyticsMenuItems.map((item) => (
+                        <Menu.Item key={item.id}>
+                          {({ active }) => (
+                            <button
+                              onClick={() => handleAnalyticsNavigation(item.id)}
+                              className={`${
+                                active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
+                              } group flex w-full items-center px-4 py-3 text-sm font-medium transition-colors`}
+                            >
+                              <item.icon className="mr-3 h-5 w-5" />
+                              {item.name}
+                            </button>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </div>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
             </nav>
 
             {/* Right side */}
@@ -148,17 +319,17 @@ export default function Home() {
                 <BellIcon className="w-5 h-5" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-cherish-red rounded-full animate-pulse"></div>
               </button>
-              <ProfileDropdown />
+              <ProfileDropdown onNavigate={handleNavigation} />
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-3">
             {/* Navigation Card */}
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
               <div className="space-y-2">
@@ -175,12 +346,50 @@ export default function Home() {
                   <UserIcon className="w-5 h-5 text-cherish-gray-600 group-hover:text-cherish-green transition-colors" />
                   <span className="font-semibold text-cherish-dark group-hover:text-cherish-green transition-colors">For You</span>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-2xl hover:bg-gradient-to-r hover:from-cherish-orange-light/20 hover:to-cherish-orange-light/10 transition-all cursor-pointer group">
+                <button 
+                  onClick={() => setShowAddFeedModal(true)}
+                  className="w-full flex items-center space-x-3 p-4 rounded-2xl hover:bg-gradient-to-r hover:from-cherish-orange-light/20 hover:to-cherish-orange-light/10 transition-all group"
+                >
                   <PlusIcon className="w-5 h-5 text-cherish-gray-600 group-hover:text-cherish-orange transition-colors" />
                   <span className="font-semibold text-cherish-dark group-hover:text-cherish-orange transition-colors">Add feed</span>
-                </div>
+                </button>
               </div>
             </div>
+
+            {/* Active Feeds */}
+            {activeFeeds.length > 0 && (
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
+                <h3 className="text-lg font-bold text-cherish-dark mb-4">Active Feeds</h3>
+                <div className="space-y-2">
+                  {activeFeeds.map((feed, index) => (
+                    <div key={`${feed.type}-${feed.id}`} className="flex items-center justify-between p-3 rounded-2xl bg-cherish-gray-50 hover:bg-cherish-gray-100 transition-all">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                          feed.type === 'teams' ? 'bg-cherish-green text-white' :
+                          feed.type === 'departments' ? 'bg-cherish-orange text-white' :
+                          'bg-cherish-red text-white'
+                        }`}>
+                          {feed.type === 'teams' ? (
+                            <UsersIcon className="w-4 h-4" />
+                          ) : feed.type === 'departments' ? (
+                            <BuildingOfficeIcon className="w-4 h-4" />
+                          ) : (
+                            <UserIcon className="w-4 h-4" />
+                          )}
+                        </div>
+                        <span className="font-medium text-cherish-dark text-sm">{feed.name}</span>
+                      </div>
+                      <button
+                        onClick={() => handleRemoveFeed(feed.type, feed.id)}
+                        className="text-cherish-gray-400 hover:text-cherish-red transition-colors p-1 rounded-lg hover:bg-cherish-red-light/20"
+                      >
+                        <XMarkIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Team Recognition Card */}
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-cherish-gray-100">
@@ -234,7 +443,27 @@ export default function Home() {
           </div>
 
           {/* Main Feed */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-6">
+            {/* Allowance Notice Banner */}
+            {showAllowanceBanner && (
+              <div className="bg-cherish-gray-100 border border-cherish-gray-200 rounded-2xl p-4 mb-6 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Tooltip content="Your 227 points from allowance adjustments will not expire.">
+                    <InformationCircleIcon className="w-5 h-5 text-cherish-gray-600 flex-shrink-0 cursor-help" />
+                  </Tooltip>
+                  <span className="text-sm text-cherish-gray-700">
+                    Allowance of 200 points expires in <strong>14 days</strong>
+                  </span>
+                </div>
+                <button
+                  onClick={() => setShowAllowanceBanner(false)}
+                  className="text-cherish-gray-500 hover:text-cherish-gray-700 transition-colors p-1 rounded-lg hover:bg-cherish-gray-200"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
             {/* Post Creation */}
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-8 border border-cherish-gray-100">
               <div className="flex items-center space-x-4">
@@ -253,26 +482,16 @@ export default function Home() {
                   <CoinDisplay amount={427} type="coin" size="md" animated />
                   <button 
                     onClick={() => setShowRecognitionModal(true)}
-                    className="bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono hover:from-cherish-yellow-mono hover:to-cherish-yellow text-cherish-dark px-6 py-3 rounded-2xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="bg-cherish-yellow-light hover:shadow-lg text-cherish-yellow-dark font-medium px-6 py-3 rounded-lg border-2 border-cherish-yellow-dark transition-all duration-200"
                   >
-                    Give recognition
+                    🏆 Give recognition
                   </button>
                 </div>
               </div>
                   </div>
 
             {/* Moments in motion */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-8 border border-cherish-gray-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-cherish-orange to-cherish-orange-light rounded-2xl flex items-center justify-center">
-                    <SparklesIcon className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-cherish-dark">Moments in motion</h3>
-                </div>
-                <ChevronDownIcon className="w-5 h-5 text-cherish-gray-400 hover:text-cherish-orange transition-colors cursor-pointer" />
-              </div>
-            </div>
+            <MomentsInMotion className="mb-8" />
 
             {/* Feed Posts */}
             <div className="space-y-8">
@@ -433,9 +652,33 @@ export default function Home() {
                         </svg>
                         <span className="text-sm">Add-on</span>
                       </button>
-                      <button className="text-cherish-gray-500 hover:text-cherish-yellow-mono transition-colors">
-                        <EllipsisHorizontalIcon className="w-5 h-5" />
-                      </button>
+                      <div className="relative">
+                        <button 
+                          onClick={() => handleDropdownToggle(post.id)}
+                          className="text-cherish-gray-500 hover:text-cherish-yellow-mono transition-colors p-1 rounded-lg hover:bg-cherish-gray-100"
+                        >
+                          <EllipsisHorizontalIcon className="w-5 h-5" />
+                        </button>
+                        
+                        {openDropdownId === post.id && (
+                          <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-cherish-gray-200 py-2 z-50">
+                            <button
+                              onClick={() => handleCopyLink(post.id)}
+                              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-cherish-gray-700 hover:bg-cherish-gray-50 transition-colors"
+                            >
+                              <LinkIcon className="w-4 h-4" />
+                              <span>Copy link</span>
+                            </button>
+                            <button
+                              onClick={() => handleReport(post.id)}
+                              className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-cherish-gray-700 hover:bg-cherish-gray-50 transition-colors"
+                            >
+                              <FlagIcon className="w-4 h-4" />
+                              <span>Report</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -444,7 +687,7 @@ export default function Home() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-3">
             {/* Rewards */}
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
               <div className="flex items-center justify-between mb-6">
@@ -465,7 +708,7 @@ export default function Home() {
                 </div>
               </div>
               
-              <button className="w-full bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono hover:from-cherish-yellow-mono hover:to-cherish-yellow text-cherish-dark font-bold py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <button className="w-full bg-cherish-yellow-light hover:shadow-lg text-cherish-yellow-dark font-medium py-4 rounded-lg border-2 border-cherish-yellow-dark transition-all duration-200">
                 🛍️ Shop rewards
               </button>
                 </div>
@@ -474,9 +717,16 @@ export default function Home() {
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 mb-6 border border-cherish-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-cherish-dark">🎉 Celebrations</h3>
-                <button className="text-cherish-gray-400 hover:text-cherish-orange transition-colors p-2 rounded-xl hover:bg-cherish-gray-100">
-                  <EllipsisHorizontalIcon className="w-5 h-5" />
-                </button>
+                <Tooltip 
+                  content="Displays upcoming celebrations for your close connections and teammates that you haven't celebrated yet."
+                  position="top"
+                  size="sm"
+                  maxWidth="md"
+                >
+                  <button className="text-cherish-gray-400 hover:text-cherish-orange transition-colors p-2 rounded-xl hover:bg-cherish-gray-100">
+                    <InformationCircleIcon className="w-5 h-5" />
+                  </button>
+                </Tooltip>
               </div>
               
               <div className="space-y-4">
@@ -516,9 +766,16 @@ export default function Home() {
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-cherish-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-cherish-dark">📈 Trending</h3>
-                <button className="text-cherish-gray-400 hover:text-cherish-green transition-colors p-2 rounded-xl hover:bg-cherish-gray-100">
-                  <EllipsisHorizontalIcon className="w-5 h-5" />
-                </button>
+                <Tooltip 
+                  content="Displays the most popular company values and custom hashtags based on recent activity over the last 15 days."
+                  position="top"
+                  size="sm"
+                  maxWidth="md"
+                >
+                  <button className="text-cherish-gray-400 hover:text-cherish-green transition-colors p-2 rounded-xl hover:bg-cherish-gray-100">
+                    <InformationCircleIcon className="w-5 h-5" />
+                  </button>
+                </Tooltip>
               </div>
               
               <div className="space-y-6">
@@ -587,6 +844,20 @@ export default function Home() {
         onClose={() => setShowPostModal(false)} 
         availablePoints={427}
       />
+
+      <AddFeedModal
+        isOpen={showAddFeedModal}
+        onClose={() => setShowAddFeedModal(false)}
+        onAddFeed={handleAddFeed}
+      />
     </div>
+  )
+}
+
+export default function Home() {
+  return (
+    <NotificationProvider>
+      <HomeContent />
+    </NotificationProvider>
   )
 }

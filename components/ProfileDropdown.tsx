@@ -6,13 +6,21 @@ import {
   UserIcon, 
   CogIcon, 
   ArrowRightOnRectangleIcon,
-  BellIcon,
-  ShieldCheckIcon,
-  ChartBarIcon
+  BookmarkIcon,
+  SpeakerWaveIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline'
-import Link from 'next/link'
 
-export default function ProfileDropdown() {
+interface ProfileDropdownProps {
+  onNavigate?: (page: string) => void;
+}
+
+export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
+  const handleNavigation = (page: string) => {
+    if (onNavigate) {
+      onNavigate(page);
+    }
+  };
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -52,86 +60,87 @@ export default function ProfileDropdown() {
           <div className="py-2">
             <Menu.Item>
               {({ active }) => (
-                <Link
-                  href="/profile"
+                <button
+                  onClick={() => handleNavigation('profile')}
                   className={`${
                     active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex items-center px-6 py-3 text-sm font-medium transition-colors`}
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
                 >
                   <UserIcon className="mr-3 h-5 w-5" />
-                  View Profile
-                </Link>
+                  View profile
+                </button>
               )}
             </Menu.Item>
 
             <Menu.Item>
               {({ active }) => (
-                <Link
+                <button
+                  onClick={() => handleNavigation('announcements')}
+                  className={`${
+                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                >
+                  <SpeakerWaveIcon className="mr-3 h-5 w-5" />
+                  Announcements
+                </button>
+              )}
+            </Menu.Item>
+
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => handleNavigation('bookmarks')}
+                  className={`${
+                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                >
+                  <BookmarkIcon className="mr-3 h-5 w-5" />
+                  Bookmarks
+                </button>
+              )}
+            </Menu.Item>
+
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => handleNavigation('profile-settings')}
+                  className={`${
+                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                >
+                  <CogIcon className="mr-3 h-5 w-5" />
+                  Profile settings
+                </button>
+              )}
+            </Menu.Item>
+
+            <Menu.Item>
+              {({ active }) => (
+                <a
                   href="/admin"
                   className={`${
                     active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
                   } group flex items-center px-6 py-3 text-sm font-medium transition-colors`}
                 >
                   <ShieldCheckIcon className="mr-3 h-5 w-5" />
-                  Go to Admin
-                </Link>
-              )}
-            </Menu.Item>
-
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/settings"
-                  className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex items-center px-6 py-3 text-sm font-medium transition-colors`}
-                >
-                  <CogIcon className="mr-3 h-5 w-5" />
-                  Settings
-                </Link>
-              )}
-            </Menu.Item>
-
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/notifications"
-                  className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex items-center px-6 py-3 text-sm font-medium transition-colors`}
-                >
-                  <BellIcon className="mr-3 h-5 w-5" />
-                  Notifications
-                </Link>
-              )}
-            </Menu.Item>
-
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href="/analytics"
-                  className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex items-center px-6 py-3 text-sm font-medium transition-colors`}
-                >
-                  <ChartBarIcon className="mr-3 h-5 w-5" />
-                  Analytics
-                </Link>
+                  Admin settings
+                </a>
               )}
             </Menu.Item>
           </div>
 
-          {/* Sign Out */}
+          {/* Log Out */}
           <div className="py-2">
             <Menu.Item>
               {({ active }) => (
                 <button
+                  onClick={() => handleNavigation('logout')}
                   className={`${
                     active ? 'bg-cherish-red-light/10 text-cherish-red' : 'text-cherish-gray-700'
                   } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
                 >
                   <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
-                  Sign Out
+                  Log out
                 </button>
               )}
             </Menu.Item>

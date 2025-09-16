@@ -68,12 +68,13 @@ export default function Tooltip({ content, children, position = 'top', size = 'x
             ${maxWidthClasses[maxWidth]}
             transition-all duration-200 ease-out
             backdrop-blur-sm bg-opacity-95
+            whitespace-normal
           `}
           style={{ 
             animation: 'fadeInScale 0.15s ease-out',
           }}
         >
-          <div className="font-normal leading-tight">
+          <div className="font-normal leading-tight break-words">
             {content}
           </div>
           
