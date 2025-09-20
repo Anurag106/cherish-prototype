@@ -24,7 +24,7 @@ export default function ProgramSettings() {
 
   return (
     <NotificationProvider>
-      <div className="flex h-screen bg-cherish-gray-50">
+      <div className="flex h-screen bg-primary-50">
         <Sidebar 
           isOpen={sidebarOpen} 
           onToggle={() => setSidebarOpen(!sidebarOpen)}

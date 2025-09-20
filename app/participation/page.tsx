@@ -325,7 +325,7 @@ export default function ParticipationPage() {
 
           {/* Company Overall Legend */}
           <div className="flex items-center space-x-2 mb-6">
-            <div className="w-3 h-3 bg-cherish-gray-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-primary-500 rounded-full"></div>
             <span className="text-sm text-cherish-gray-600 font-medium">Company Overall</span>
           </div>
 

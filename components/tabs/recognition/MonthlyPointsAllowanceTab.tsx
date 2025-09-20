@@ -181,7 +181,7 @@ export default function MonthlyPointsAllowanceTab() {
     <div className="settings-section">
       <h2 className="settings-header">Monthly Points Allowance</h2>
       <p className="settings-description">
-        Every Bonusly user has a monthly allowance to give to their peers to recognize outstanding work and valuable contributions. 
+        Every Cherish user has a monthly allowance to give to their peers to recognize outstanding work and valuable contributions. 
         By default, each user receives the same amount unless custom rules are set.
       </p>
 

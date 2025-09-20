@@ -24,7 +24,7 @@ export default function AccountSettings() {
   const activeTabName = tabs.find(tab => tab.id === activeTab)?.name || 'Account Settings'
 
   return (
-    <div className="flex h-screen bg-cherish-gray-50">
+    <div className="flex h-screen bg-primary-50">
       <Sidebar 
         isOpen={sidebarOpen} 
         onToggle={() => setSidebarOpen(!sidebarOpen)}

@@ -140,52 +140,52 @@ function NotificationItem({ notification, onRemove }: NotificationItemProps) {
   const getIcon = () => {
     switch (notification.type) {
       case 'success':
-        return <CheckCircleIcon className="h-6 w-6 text-green-500" />
+        return <CheckCircleIcon className="h-6 w-6 text-brand-500" />
       case 'error':
-        return <XCircleIcon className="h-6 w-6 text-red-500" />
+        return <XCircleIcon className="h-6 w-6 text-primary-900" />
       case 'warning':
-        return <ExclamationTriangleIcon className="h-6 w-6 text-amber-500" />
+        return <ExclamationTriangleIcon className="h-6 w-6 text-primary-600" />
       case 'info':
-        return <InformationCircleIcon className="h-6 w-6 text-blue-500" />
+        return <InformationCircleIcon className="h-6 w-6 text-brand-500" />
     }
   }
 
   const getBackgroundColor = () => {
     switch (notification.type) {
       case 'success':
-        return 'bg-green-50 border-green-200'
+        return 'bg-brand-50 border-brand-200'
       case 'error':
-        return 'bg-red-50 border-red-200'
+        return 'bg-primary-50 border-primary-200'
       case 'warning':
-        return 'bg-amber-50 border-amber-200'
+        return 'bg-primary-100 border-primary-300'
       case 'info':
-        return 'bg-blue-50 border-blue-200'
+        return 'bg-brand-50 border-brand-200'
     }
   }
 
   const getTitleColor = () => {
     switch (notification.type) {
       case 'success':
-        return 'text-green-900'
+        return 'text-brand-700'
       case 'error':
-        return 'text-red-900'
+        return 'text-primary-900'
       case 'warning':
-        return 'text-amber-900'
+        return 'text-primary-800'
       case 'info':
-        return 'text-blue-900'
+        return 'text-brand-700'
     }
   }
 
   const getMessageColor = () => {
     switch (notification.type) {
       case 'success':
-        return 'text-green-700'
+        return 'text-brand-600'
       case 'error':
-        return 'text-red-700'
+        return 'text-primary-700'
       case 'warning':
-        return 'text-amber-700'
+        return 'text-primary-700'
       case 'info':
-        return 'text-blue-700'
+        return 'text-brand-600'
     }
   }
 
@@ -227,7 +227,7 @@ function NotificationItem({ notification, onRemove }: NotificationItemProps) {
           <div className="ml-4 flex-shrink-0 flex">
             <button
               onClick={handleRemove}
-              className={`rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cherish-yellow`}
+              className={`rounded-md inline-flex text-primary-400 hover:text-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 hover:scale-110 transition-all duration-200`}
             >
               <XMarkIcon className="h-5 w-5" />
             </button>

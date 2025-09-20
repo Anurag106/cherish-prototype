@@ -37,16 +37,16 @@ export default function CoinDisplay({ amount, type = 'coin', size = 'md', animat
     <div className="flex items-center space-x-2">
       <div className={`
         ${sizeClasses[size]} 
-        bg-gradient-to-br from-cherish-yellow via-cherish-yellow-mono to-cherish-yellow-dark 
-        rounded-full flex items-center justify-center text-cherish-dark font-bold 
-        shadow-lg border-2 border-cherish-yellow-light
+        bg-points-green 
+        rounded-full flex items-center justify-center text-white font-bold 
+        shadow-md
         ${animated ? 'animate-pulse hover:animate-bounce' : ''}
         transition-all duration-300 hover:scale-110 hover:shadow-xl
       `}>
         {getIcon()}
       </div>
       <span className={`
-        font-bold text-cherish-dark 
+        font-bold text-primary-900 
         ${size === 'lg' ? 'text-xl' : size === 'md' ? 'text-lg' : 'text-base'}
         ${animated ? 'animate-pulse' : ''}
       `}>

@@ -13,11 +13,11 @@ export default function CherishLogo({ variant = 'default', className = '' }: Che
     <div className={`flex items-center ${variant === 'compact' ? 'justify-center' : 'space-x-3'} ${className}`}>
       {/* Fun Logo Icon */}
       <div className="relative">
-        <div className={`${variant === 'compact' ? 'w-8 h-8' : 'w-10 h-10'} bg-gradient-to-br from-cherish-yellow via-yellow-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-soft transition-all duration-300 hover:rotate-12 hover:scale-110`}>
+        <div className={`${variant === 'compact' ? 'w-8 h-8' : 'w-10 h-10'} bg-brand-500 rounded-2xl flex items-center justify-center shadow-sm transition-all duration-300 hover:rotate-12 hover:scale-110`}>
           {/* Fun smiley face with heart eyes for "cherish" */}
           <svg
             viewBox="0 0 24 24"
-            className={`${variant === 'compact' ? 'w-4 h-4' : 'w-6 h-6'} text-cherish-dark`}
+            className={`${variant === 'compact' ? 'w-4 h-4' : 'w-6 h-6'} text-white`}
             fill="currentColor"
           >
             {/* Smiley face */}
@@ -32,14 +32,14 @@ export default function CherishLogo({ variant = 'default', className = '' }: Che
         {/* Multiple sparkle accents for fun */}
         {variant !== 'compact' && (
           <>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-cherish-yellow rounded-full animate-pulse"></div>
-            <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
-            <div className="absolute top-0 left-0 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-brand-400 rounded-full animate-pulse"></div>
+            <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-brand-600 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+            <div className="absolute top-0 left-0 w-1.5 h-1.5 bg-brand-300 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
           </>
         )}
         {/* Single sparkle for compact mode */}
         {variant === 'compact' && (
-          <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
+          <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-brand-400 rounded-full animate-pulse"></div>
         )}
       </div>
       
@@ -49,12 +49,12 @@ export default function CherishLogo({ variant = 'default', className = '' }: Che
           <div className={`font-bold tracking-tight ${
             variant === 'sidebar' 
               ? 'text-xl text-white' 
-              : 'text-2xl text-cherish-dark'
+              : 'text-2xl text-primary-900'
           }`}>
             cherish
           </div>
           {variant === 'default' && (
-            <div className="text-xs font-medium text-cherish-gray-500 tracking-wider uppercase text-center">
+            <div className="text-xs font-medium text-primary-600 tracking-wider uppercase text-center">
               Employee Recognition
             </div>
           )}

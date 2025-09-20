@@ -24,8 +24,8 @@ export default function Toggle({
         checked={enabled}
         onChange={onChange}
         className={clsx(
-          enabled ? 'bg-yellow-400' : 'bg-gray-200',
-          'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2'
+          enabled ? 'bg-brand-500' : 'bg-primary-200',
+          'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2'
         )}
       >
         <span className="sr-only">Toggle setting</span>
@@ -39,10 +39,10 @@ export default function Toggle({
       {(label || description) && (
         <Switch.Label as="div" className="ml-3 cursor-pointer">
           {label && (
-            <div className="text-sm font-medium text-gray-900">{label}</div>
+            <div className="text-sm font-medium text-primary-900">{label}</div>
           )}
           {description && (
-            <div className="text-sm text-gray-500">{description}</div>
+            <div className="text-sm text-primary-500">{description}</div>
           )}
         </Switch.Label>
       )}

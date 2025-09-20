@@ -14,80 +14,119 @@
   
   body {
     font-family: 'Inter', sans-serif;
-    background-color: #f9fafb;
+    background-color: #f8fafc;
+    color: #0f172a;
   }
 
   /* Custom focus styles */
   *:focus {
-    outline: 2px solid #fff024;
+    outline: 2px solid #06b6d4;
     outline-offset: 2px;
+  }
+  
+  /* CSS Custom Properties for consistent theming */
+  :root {
+    --color-background: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f1f5f9;
+    --color-border: #e2e8f0;
+    --color-border-hover: #cbd5e1;
+    
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #1e293b;
+    --color-text-tertiary: #334155;
+    --color-text-muted: #64748b;
+    
+    --color-brand-primary: #06b6d4;
+    --color-brand-hover: #0891b2;
+    --color-brand-light: #ecfeff;
+    
+    --color-sidebar-bg: #0f172a;
+    --color-sidebar-text: #f8fafc;
+    --color-sidebar-active: #06b6d4;
+    --color-sidebar-hover: #1e293b;
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
 }
 
 @layer components {
   /* Modern Button System */
   .btn-primary {
-    @apply bg-cherish-yellow hover:bg-primary-500 text-cherish-dark font-semibold px-6 py-3 rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cherish-yellow focus:ring-offset-2 shadow-soft hover:shadow-medium transform hover:-translate-y-0.5;
+    @apply bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 shadow-sm hover:shadow-md hover:scale-105;
   }
   
   .btn-secondary {
-    @apply bg-white hover:bg-cherish-gray-50 text-cherish-dark font-medium px-6 py-3 rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cherish-gray-300 focus:ring-offset-2 border border-cherish-gray-200 shadow-soft hover:shadow-medium transform hover:-translate-y-0.5;
+    @apply bg-white hover:bg-primary-50 text-primary-900 font-medium px-6 py-3 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 border border-primary-200 shadow-sm hover:shadow-md hover:scale-105;
   }
 
   .btn-ghost {
-    @apply bg-transparent hover:bg-cherish-yellow-light text-cherish-gray-700 hover:text-cherish-dark font-medium px-4 py-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cherish-yellow focus:ring-offset-2;
+    @apply bg-transparent hover:bg-primary-100 text-primary-600 hover:text-primary-900 font-medium px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 hover:scale-105;
   }
   
   /* Modern Sidebar */
   .sidebar-item {
-    @apply flex items-center px-3 py-2.5 text-sidebar-text hover:bg-sidebar-active hover:text-white transition-all duration-200 cursor-pointer rounded-xl mx-2 text-sm whitespace-nowrap;
+    @apply flex items-center px-3 py-2.5 text-sidebar-text hover:bg-sidebar-hover hover:text-white transition-all duration-200 cursor-pointer rounded-lg mx-2 text-sm whitespace-nowrap hover:scale-105;
   }
   
   .sidebar-item.active {
-    @apply bg-cherish-yellow text-cherish-dark shadow-soft;
+    @apply bg-brand-500 text-white shadow-sm;
   }
 
   .sidebar-icon {
-    @apply h-5 w-5 flex-shrink-0 text-cherish-yellow-mono transition-colors duration-300;
+    @apply h-5 w-5 flex-shrink-0 text-sidebar-text transition-colors duration-200;
   }
 
   .sidebar-item.active .sidebar-icon {
-    @apply text-cherish-dark;
+    @apply text-white;
+  }
+  
+  .sidebar-nav {
+    background-color: var(--color-sidebar-bg);
   }
   
   /* Enhanced Form Inputs */
   .form-input {
-    @apply w-full px-4 py-3 border border-cherish-gray-300 rounded-2xl shadow-soft focus:outline-none focus:ring-2 focus:ring-cherish-yellow focus:border-transparent text-sm transition-all duration-300 bg-white hover:border-cherish-gray-400;
+    @apply w-full px-4 py-3 border border-primary-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all duration-200 bg-white hover:border-primary-300 hover:shadow-md;
   }
 
   .form-input:focus {
-    @apply shadow-medium;
+    @apply shadow-md;
   }
 
   .form-input::placeholder {
-    @apply text-cherish-gray-400 italic;
+    @apply text-primary-400;
   }
 
-  .form-input:focus::placeholder {
-    @apply opacity-0 transform translate-y-1;
+  .form-select {
+    @apply w-full px-4 py-3 border border-primary-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-all duration-200 bg-white hover:border-primary-300 hover:shadow-md appearance-none bg-no-repeat bg-right pr-10;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-size: 1.25em 1.25em;
+  }
+
+  .form-select:focus {
+    @apply shadow-md;
   }
   
   /* Modern Toggle Switch */
   .toggle-switch {
-    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cherish-yellow focus:ring-offset-2 shadow-soft;
+    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 shadow-sm;
   }
   
   .toggle-switch.enabled {
-    @apply bg-cherish-yellow-mono;
+    @apply bg-brand-500;
   }
   
   .toggle-switch.disabled {
-    @apply bg-cherish-gray-300;
+    @apply bg-primary-300;
   }
 
   /* Modern Card System */
   .settings-card {
-    @apply bg-white rounded-3xl shadow-soft border border-cherish-gray-100 p-8 hover:shadow-medium transition-all duration-300;
+    @apply bg-white rounded-2xl shadow-sm border border-primary-200 p-8 hover:shadow-md transition-all duration-200 hover:scale-105;
   }
 
   .settings-section {
@@ -95,28 +134,28 @@
   }
 
   .settings-header {
-    @apply text-xl font-bold text-cherish-dark mb-6;
+    @apply text-xl font-bold text-primary-900 mb-6;
   }
 
   .settings-subheader {
-    @apply text-lg font-semibold text-cherish-gray-800 mb-4;
+    @apply text-lg font-semibold text-primary-800 mb-4;
   }
 
   .settings-description {
-    @apply text-sm text-cherish-gray-600 mb-6 leading-relaxed;
+    @apply text-sm text-primary-600 mb-6 leading-relaxed;
   }
 
   /* Modern Tab System */
   .tab-button {
-    @apply py-3 px-6 border-b-2 font-semibold text-sm transition-all duration-300 whitespace-nowrap rounded-t-xl;
+    @apply py-3 px-6 border-b-2 font-semibold text-sm transition-all duration-200 whitespace-nowrap rounded-t-lg hover:scale-105;
   }
 
   .tab-button.active {
-    @apply border-cherish-yellow-mono text-cherish-yellow-mono bg-cherish-yellow-light;
+    @apply border-brand-500 text-brand-600 bg-brand-50;
   }
 
   .tab-button.inactive {
-    @apply border-transparent text-cherish-gray-500 hover:text-cherish-gray-700 hover:border-cherish-gray-300 hover:bg-cherish-gray-50;
+    @apply border-transparent text-primary-500 hover:text-primary-900 hover:border-brand-300 hover:bg-primary-50;
   }
 
   /* Responsive utilities */
@@ -126,17 +165,17 @@
 
   /* Security Log Buttons */
   .security-log-btn {
-    @apply bg-cherish-yellow-light hover:bg-cherish-yellow text-cherish-dark font-semibold py-4 px-6 rounded-2xl transition-all duration-300 border-2 border-cherish-yellow-mono hover:border-cherish-yellow shadow-soft hover:shadow-medium transform hover:-translate-y-1 cursor-pointer text-center;
+    @apply bg-brand-50 hover:bg-brand-100 text-brand-700 font-semibold py-4 px-6 rounded-xl transition-all duration-200 border border-brand-200 hover:border-brand-300 shadow-sm hover:shadow-md cursor-pointer text-center hover:scale-105;
   }
 
   /* Info Icon Styling - Improved UX */
   .info-icon {
-    @apply h-3.5 w-3.5 text-cherish-gray-400 hover:text-cherish-yellow-mono cursor-help transition-all duration-200 opacity-70 hover:opacity-100;
+    @apply h-3.5 w-3.5 text-primary-400 hover:text-brand-500 cursor-help transition-all duration-200 hover:scale-110;
   }
 
   /* Improved spacing and layout */
   .section-divider {
-    @apply border-t border-cherish-gray-200 pt-8 mt-8;
+    @apply border-t border-primary-200 pt-8 mt-8;
   }
 }
 
@@ -148,7 +187,7 @@
   
   .btn-primary,
   .btn-secondary {
-    @apply px-4 py-2 text-sm;
+    @apply px-4 py-2.5 text-sm;
   }
 }
 
@@ -159,15 +198,15 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100;
+    @apply bg-primary-100;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
+    @apply bg-primary-300 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    @apply bg-primary-400;
   }
 
   /* Hide scrollbar in sidebar */

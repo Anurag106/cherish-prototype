@@ -52,7 +52,7 @@ export default function RecognitionPage() {
 
   return (
     <NotificationProvider>
-      <div className="flex h-screen bg-cherish-gray-50">
+      <div className="flex h-screen bg-primary-50">
         <Sidebar 
           isOpen={true} 
           onToggle={() => {}} 
@@ -63,11 +63,11 @@ export default function RecognitionPage() {
         <div className="flex-1 flex flex-col overflow-hidden">
           <MobileHeader onMenuToggle={() => {}} title="Recognition Management" />
           
-          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-cherish-gray-50">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-primary-50">
             <div className="container mx-auto px-6 py-8">
               <div className="mb-8">
-                <h1 className="text-3xl font-bold text-cherish-dark mb-2">Recognition Management</h1>
-                <p className="text-cherish-gray-600">
+                <h1 className="text-3xl font-bold text-primary-900 mb-2">Recognition Management</h1>
+                <p className="text-primary-600">
                   Manage all aspects of your employee recognition program from peer-to-peer recognition to celebration awards.
                 </p>
               </div>
@@ -77,17 +77,17 @@ export default function RecognitionPage() {
                   <div
                     key={option.id}
                     onClick={() => router.push(option.href)}
-                    className="bg-white rounded-3xl shadow-soft border border-cherish-gray-200 p-6 hover:shadow-medium transition-all duration-300 cursor-pointer group"
+                    className="bg-white rounded-3xl shadow-sm border border-primary-200 p-6 hover:shadow-md transition-all duration-300 cursor-pointer group hover:scale-105"
                   >
                     <div className="flex items-start space-x-4">
                       <div className={`${option.color} rounded-2xl p-3 group-hover:scale-110 transition-transform duration-300`}>
                         <option.icon className="h-6 w-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-cherish-dark mb-2 group-hover:text-cherish-yellow-mono transition-colors">
+                        <h3 className="text-lg font-semibold text-primary-900 mb-2 group-hover:text-brand-600 transition-colors">
                           {option.title}
                         </h3>
-                        <p className="text-sm text-cherish-gray-600 leading-relaxed">
+                        <p className="text-sm text-primary-600 leading-relaxed">
                           {option.description}
                         </p>
                       </div>
@@ -97,24 +97,24 @@ export default function RecognitionPage() {
               </div>
 
               {/* Quick Stats */}
-              <div className="mt-12 bg-white rounded-3xl shadow-soft border border-cherish-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-cherish-dark mb-6">Recognition Overview</h2>
+              <div className="mt-12 bg-white rounded-3xl shadow-sm border border-primary-200 p-6 hover:shadow-md transition-all duration-200">
+                <h2 className="text-xl font-semibold text-primary-900 mb-6">Recognition Overview</h2>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-cherish-yellow-mono mb-1">1,247</div>
-                    <div className="text-sm text-cherish-gray-600">Total Recognitions</div>
+                    <div className="text-2xl font-bold text-brand-600 mb-1">1,247</div>
+                    <div className="text-sm text-primary-600">Total Recognitions</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-500 mb-1">89</div>
-                    <div className="text-sm text-cherish-gray-600">This Month</div>
+                    <div className="text-2xl font-bold text-brand-500 mb-1">89</div>
+                    <div className="text-sm text-primary-600">This Month</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-orange-500 mb-1">12</div>
-                    <div className="text-sm text-cherish-gray-600">Pending Approval</div>
+                    <div className="text-2xl font-bold text-primary-700 mb-1">12</div>
+                    <div className="text-sm text-primary-600">Pending Approval</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-500 mb-1">3</div>
-                    <div className="text-sm text-cherish-gray-600">Reported Items</div>
+                    <div className="text-2xl font-bold text-primary-800 mb-1">3</div>
+                    <div className="text-sm text-primary-600">Reported Items</div>
                   </div>
                 </div>
               </div>

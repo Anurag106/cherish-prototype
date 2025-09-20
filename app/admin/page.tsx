@@ -3,14 +3,71 @@
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
 import MobileHeader from '@/components/MobileHeader'
-import Link from 'next/link'
+import { 
+  InformationCircleIcon,
+  ChartBarIcon,
+  UserGroupIcon,
+  TrophyIcon,
+  GiftIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  ChevronDownIcon,
+  CurrencyDollarIcon,
+  BanknotesIcon,
+  CalendarDaysIcon
+} from '@heroicons/react/24/outline'
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  LineChart,
+  Line
+} from 'recharts'
 
-export default function DashboardPage() {
+export default function AdminDashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [subscriptionExpanded, setSubscriptionExpanded] = useState(false)
+  const [rewardsExpanded, setRewardsExpanded] = useState(true)
+
+  // Sample data for charts
+  const rewardsData = [
+    { month: 'Mar', current: 9000, previous: 5000 },
+    { month: 'Apr', current: 7000, previous: 6000 },
+    { month: 'May', current: 6000, previous: 5500 },
+    { month: 'Jun', current: 4000, previous: 4000 },
+    { month: 'Jul', current: 3500, previous: 3800 },
+    { month: 'Aug', current: 3000, previous: 3200 },
+    { month: 'Sep', current: 3200, previous: 3000 },
+    { month: 'Oct', current: 3800, previous: 3500 },
+    { month: 'Nov', current: 4200, previous: 4000 },
+    { month: 'Dec', current: 5000, previous: 4500 },
+    { month: 'Jan', current: 6500, previous: 5500 },
+    { month: 'Feb', current: 8500, previous: 7000 }
+  ]
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-primary-200">
+          <p className="font-semibold text-primary-900 mb-2">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
+              {`${entry.dataKey === 'current' ? 'Current 2023-2024' : '2022-2023'}: $${entry.value.toLocaleString()}`}
+            </p>
+          ))}
+        </div>
+      )
+    }
+    return null
+  }
 
   return (
-    <div className="flex h-screen bg-cherish-gray-50">
+    <div className="flex h-screen bg-primary-50">
       <Sidebar 
         isOpen={sidebarOpen} 
         onToggle={() => setSidebarOpen(!sidebarOpen)}
@@ -21,129 +78,390 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col lg:ml-0">
         <MobileHeader 
           onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-          title="Dashboard"
+          title="Admin Dashboard"
         />
         
         <main className="flex-1 overflow-auto">
           <div className="p-4 lg:p-8">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               {/* Hero Section */}
-              <div className="mb-12 hidden lg:block">
-                <div className="flex items-center space-x-6 mb-6">
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-br from-cherish-yellow to-primary-500 rounded-3xl flex items-center justify-center shadow-medium">
-                      <svg viewBox="0 0 24 24" className="w-8 h-8 text-cherish-dark" fill="currentColor">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                      </svg>
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-cherish-yellow rounded-full animate-pulse"></div>
+              <div className="mb-8">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-12 h-12 bg-brand-500 rounded-2xl flex items-center justify-center shadow-md">
+                    <ChartBarIcon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-4xl font-bold text-cherish-dark mb-2">
-                      Dashboard
+                    <h1 className="text-3xl font-bold text-primary-900 mb-1">
+                      Welcome back, Charlotte!
                     </h1>
-                    <p className="text-xl text-cherish-gray-600">
-                      Your employee recognition platform overview
+                    <p className="text-lg text-primary-600">
+                      Admin-exclusive insights about your recognition program
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Getting Started Card */}
-              <div className="settings-card mb-8">
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="w-12 h-12 bg-cherish-yellow rounded-2xl flex items-center justify-center shadow-soft">
-                    <svg viewBox="0 0 24 24" className="w-6 h-6 text-cherish-dark" fill="currentColor">
-                      <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
-                    </svg>
+              {/* Participation and Frequency */}
+              <div className="bg-white rounded-2xl shadow-sm border border-primary-200 p-8 hover:shadow-md transition-all duration-200 mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-primary-900">Participation and frequency</h2>
+                  <div className="flex items-center space-x-2 text-sm text-primary-500">
+                    <CalendarDaysIcon className="w-4 h-4" />
+                    <span>Previous month</span>
+                    <InformationCircleIcon className="w-4 h-4 cursor-help" />
                   </div>
-                  <div>
-                    <h2 className="settings-subheader mb-1">
-                      Getting Started
-                    </h2>
-                    <p className="text-sm text-cherish-gray-600">Set up your platform for success</p>
+                </div>
+                
+                <p className="text-primary-600 mb-8 leading-relaxed">
+                  98% of your employees have participated in the previous month, with employees recognizing 
+                  each other on average of 3 times per month. These metrics offer a quick snapshot of your 
+                  company&apos;s culture of appreciation.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {/* Participation */}
+                  <div className="text-center">
+                    <div className="relative w-24 h-24 mx-auto mb-4">
+                      <div className="w-24 h-24 rounded-full border-8 border-semantic-success-500 flex items-center justify-center bg-semantic-success-50">
+                        <span className="text-2xl font-bold text-semantic-success-700">98%</span>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-sm font-medium text-primary-600">Participation</span>
+                        <InformationCircleIcon className="w-4 h-4 text-primary-400 cursor-help" />
+                      </div>
+                      <div className="text-sm text-semantic-success-600 font-medium">Great</div>
+                    </div>
+                  </div>
+
+                  {/* Monthly giving rate */}
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <div className="text-4xl font-bold text-primary-900 mb-1">2.0</div>
+                      <div className="text-sm text-primary-500">per user</div>
+                      <div className="text-sm text-primary-500">Average</div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-sm font-medium text-primary-600">Monthly giving rate</span>
+                        <InformationCircleIcon className="w-4 h-4 text-primary-400 cursor-help" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Monthly receiving rate */}
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <div className="text-4xl font-bold text-primary-900 mb-1">13.0</div>
+                      <div className="text-sm text-primary-500">per user</div>
+                      <div className="text-sm text-semantic-success-600 font-medium">Great</div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-sm font-medium text-primary-600">Monthly receiving rate</span>
+                        <InformationCircleIcon className="w-4 h-4 text-primary-400 cursor-help" />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-cherish-yellow-light to-white p-8 rounded-3xl border border-cherish-yellow mb-8">
-                  <div className="flex items-start space-x-6">
-                    <div className="w-16 h-16 bg-cherish-yellow rounded-2xl flex items-center justify-center shadow-soft flex-shrink-0">
-                      <svg viewBox="0 0 24 24" className="w-8 h-8 text-cherish-dark" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                      </svg>
+                {/* Action Links */}
+                <div className="mt-8 pt-6 border-t border-primary-200">
+                  <p className="text-sm text-primary-600 mb-4">Learn more about your company&apos;s activity:</p>
+                  <div className="flex flex-wrap gap-4">
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Recognition analytics
+                    </button>
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Participation analytics
+                    </button>
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Participation summary
+                    </button>
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Learn about our analytics
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Program Adoption */}
+              <div className="bg-white rounded-2xl shadow-sm border border-primary-200 p-8 hover:shadow-md transition-all duration-200 mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-primary-900">Program adoption</h2>
+                  <div className="flex items-center space-x-2 text-sm text-primary-500">
+                    <span>Last 30 days</span>
+                    <InformationCircleIcon className="w-4 h-4 cursor-help" />
+                  </div>
+                </div>
+                
+                <p className="text-primary-600 mb-8 leading-relaxed">
+                  Appreciation is personal. That&apos;s why it&apos;s important to offer a variety of ways to show it. Explore 
+                  the impact of your various recognition programs in the last 30 days.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Peer-to-peer */}
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
+                        <UserGroupIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-primary-900">Peer-to-peer</h3>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-cherish-dark mb-4">
-                        Configure Your Account
-                      </h3>
-                      <p className="text-cherish-gray-700 mb-6 leading-relaxed text-lg">
-                        Welcome to your employee recognition platform! Get started by configuring your account settings, customizing your interface, and setting up email templates to create an engaging experience for your team.
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <Link
-                          href="/company/account-settings"
-                          className="btn-primary inline-flex items-center justify-center"
-                        >
-                          <span className="flex items-center space-x-2">
-                            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                              <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
-                            </svg>
-                            <span>Configure Account Settings</span>
-                          </span>
-                        </Link>
-                        <Link
-                          href="/"
-                          className="bg-gradient-to-r from-cherish-yellow to-cherish-yellow-mono hover:from-cherish-yellow-mono hover:to-cherish-yellow text-cherish-dark font-semibold px-6 py-3 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center"
-                        >
-                          <span className="flex items-center space-x-2">
-                            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-                              <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/>
-                            </svg>
-                            <span>Go to Home Feed</span>
-                          </span>
-                        </Link>
+                    <div className="space-y-2">
+                      <div className="text-2xl font-bold text-primary-900">33.6K posts</div>
+                      <div className="text-sm text-primary-600">462.2K dabs</div>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-sm text-primary-600">98% reach</span>
+                        <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Awards */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
+                        <TrophyIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-primary-900">Awards</h3>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-2xl font-bold text-primary-900">101 posts</div>
+                      <div className="text-sm text-primary-600">1K points</div>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-sm text-primary-600">8% reach</span>
+                        <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Celebrations */}
+                  <div className="bg-purple-50 border border-purple-200 rounded-2xl p-6 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
+                        <GiftIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-primary-900">Celebrations</h3>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-2xl font-bold text-primary-900">333 posts</div>
+                      <div className="text-sm text-primary-600">30.9K points</div>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-sm text-primary-600">53% reach</span>
+                        <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Incentives */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+                        <ChartBarIcon className="w-5 h-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-primary-900">Incentives</h3>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-2xl font-bold text-primary-900">24K posts</div>
+                      <div className="text-sm text-primary-600">2.75K dabs</div>
+                      <div className="flex items-center space-x-1">
+                        <span className="text-sm text-primary-600">19% reach</span>
+                        <InformationCircleIcon className="w-3 h-3 text-primary-400" />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white p-6 rounded-2xl border border-cherish-gray-200 shadow-soft hover:shadow-medium transition-all duration-300">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-blue-600" fill="currentColor">
-                          <path d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"/>
-                        </svg>
-                      </div>
-                      <h3 className="font-semibold text-cherish-dark">Analytics</h3>
-                    </div>
-                    <p className="text-sm text-cherish-gray-600">Track recognition trends and employee engagement metrics</p>
+                {/* Action Links */}
+                <div className="mt-8 pt-6 border-t border-primary-200">
+                  <p className="text-sm text-primary-600 mb-4">Explore and manage your recognition programs:</p>
+                  <div className="flex flex-wrap gap-4">
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Manage peer-to-peer
+                    </button>
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Manage awards
+                    </button>
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Manage celebrations
+                    </button>
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Manage incentives
+                    </button>
                   </div>
+                  <div className="mt-2">
+                    <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                      Learn about our programs
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-                  <div className="bg-white p-6 rounded-2xl border border-cherish-gray-200 shadow-soft hover:shadow-medium transition-all duration-300">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-green-600" fill="currentColor">
-                          <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6Z"/>
-                        </svg>
-                      </div>
-                      <h3 className="font-semibold text-cherish-dark">Team</h3>
-                    </div>
-                    <p className="text-sm text-cherish-gray-600">Manage users, departments, and recognition permissions</p>
+              {/* Cost Breakdown */}
+              <div className="bg-white rounded-2xl shadow-sm border border-primary-200 p-8 hover:shadow-md transition-all duration-200 mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-primary-900">Cost breakdown</h2>
+                  <div className="flex items-center space-x-2 text-sm text-primary-500">
+                    <span>Membership YTD</span>
+                    <InformationCircleIcon className="w-4 h-4 cursor-help" />
                   </div>
+                </div>
+                
+                <p className="text-primary-600 mb-8 leading-relaxed">
+                  Comparing total cost for 1 membership year (Mar 2024 – Feb 2025)
+                </p>
 
-                  <div className="bg-white p-6 rounded-2xl border border-cherish-gray-200 shadow-soft hover:shadow-medium transition-all duration-300">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-cherish-yellow-light rounded-xl flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-cherish-yellow-mono" fill="currentColor">
-                          <path d="M5,9V21H1V9H5M9,21A2,2 0 0,1 7,19V9C7,8.45 7.22,7.95 7.59,7.59L14.17,1L15.23,2.06C15.5,2.33 15.67,2.7 15.67,3.11L15.64,3.43L14.69,8H21C21.83,8 22.54,8.5 22.84,9.22C23.03,9.64 23.03,10.14 22.84,10.56L19.84,17.47C19.54,18.19 18.83,18.69 18,18.69H9.69C9.31,18.69 8.95,18.56 8.65,18.26L7,16.61V21A2,2 0 0,1 9,21Z"/>
-                        </svg>
-                      </div>
-                      <h3 className="font-semibold text-cherish-dark">Recognition</h3>
-                    </div>
-                    <p className="text-sm text-cherish-gray-600">View and manage employee recognition posts and rewards</p>
+                {/* Cost Visualization Bar */}
+                <div className="mb-8">
+                  <div className="flex h-12 rounded-xl overflow-hidden shadow-sm">
+                    <div className="bg-semantic-success-500 flex-shrink-0" style={{ width: '10%' }}></div>
+                    <div className="bg-brand-500 flex-1"></div>
+                    <div className="bg-primary-200 flex-shrink-0" style={{ width: '15%' }}></div>
                   </div>
+                </div>
+
+                {/* Subscription Cost */}
+                <div className="border border-primary-200 rounded-2xl mb-6">
+                  <button 
+                    onClick={() => setSubscriptionExpanded(!subscriptionExpanded)}
+                    className="w-full p-6 flex items-center justify-between hover:bg-primary-50 transition-colors duration-200"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-4 h-4 bg-semantic-success-500 rounded-full"></div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-primary-900">Subscription cost</h3>
+                        <InformationCircleIcon className="w-4 h-4 text-primary-400 mt-1" />
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xl font-bold text-primary-900">$2,216.00</span>
+                      <ChevronDownIcon className={`w-5 h-5 text-primary-400 transition-transform duration-200 ${subscriptionExpanded ? 'rotate-180' : ''}`} />
+                    </div>
+                  </button>
+                  
+                  {subscriptionExpanded && (
+                    <div className="px-6 pb-6 border-t border-primary-200">
+                      <div className="mt-4 space-y-4">
+                        <p className="text-sm text-primary-600">
+                          Your subscription cost is what you pay to use the Cherish platform, and is influenced by the 
+                          number of seats in your account. Over time, subscription cost usually represents a smaller 
+                          fraction compared to rewards cost.
+                        </p>
+                        <div className="grid grid-cols-2 gap-6">
+                          <div>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-sm font-medium text-primary-600">Monthly price per seat</span>
+                              <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                            </div>
+                            <div className="text-2xl font-bold text-primary-900">$2.00</div>
+                          </div>
+                          <div>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-sm font-medium text-primary-600">Current seats</span>
+                              <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                            </div>
+                            <div className="text-2xl font-bold text-primary-900">1,108</div>
+                            <div className="text-sm text-brand-600">→ 12 users</div>
+                          </div>
+                        </div>
+                        <div className="pt-4 border-t border-primary-200">
+                          <p className="text-sm text-primary-600">Questions around your subscription costs?</p>
+                          <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline mt-1">
+                            Contact us
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Rewards Cost */}
+                <div className="border border-primary-200 rounded-2xl">
+                  <button 
+                    onClick={() => setRewardsExpanded(!rewardsExpanded)}
+                    className="w-full p-6 flex items-center justify-between hover:bg-primary-50 transition-colors duration-200"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-4 h-4 bg-brand-500 rounded-full"></div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-primary-900">Rewards cost</h3>
+                        <InformationCircleIcon className="w-4 h-4 text-primary-400 mt-1" />
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-xl font-bold text-primary-900">$23,125.00</span>
+                      <ChevronDownIcon className={`w-5 h-5 text-primary-400 transition-transform duration-200 ${rewardsExpanded ? 'rotate-180' : ''}`} />
+                    </div>
+                  </button>
+                  
+                  {rewardsExpanded && (
+                    <div className="px-6 pb-6 border-t border-primary-200">
+                      <div className="mt-6">
+                        <h4 className="text-lg font-semibold text-primary-900 mb-4">Month-to-month rewards</h4>
+                        
+                        {/* Chart */}
+                        <div className="h-64 mb-6">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={rewardsData}>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                              <XAxis dataKey="month" fontSize={12} />
+                              <YAxis fontSize={12} />
+                              <Tooltip content={<CustomTooltip />} />
+                              <Bar dataKey="current" fill="#06b6d4" name="Current 2023-2024" />
+                              <Bar dataKey="previous" fill="#94a3b8" name="2022-2023" />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+
+                        <p className="text-sm text-primary-600 mb-6">
+                          Rewards cost is flexible and under your control. You pay only for what&apos;s redeemed, not for the 
+                          points distributed. Use this chart to review your average monthly rewards cost to ensure 
+                          you&apos;re aligned with your budget.
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-6 mb-6">
+                          <div>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-sm font-medium text-primary-600">Avg. rewards cost</span>
+                              <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                            </div>
+                            <div className="text-2xl font-bold text-primary-900">$5,781.25/mo</div>
+                          </div>
+                          <div>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-sm font-medium text-primary-600">Unredeemed balance</span>
+                              <InformationCircleIcon className="w-3 h-3 text-primary-400" />
+                            </div>
+                            <div className="text-2xl font-bold text-primary-900">$4,963.00</div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-primary-200">
+                          <p className="text-sm text-primary-600 mb-4">Review and manage your subscription and reward costs:</p>
+                          <div className="flex flex-wrap gap-4">
+                            <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                              Plans & billing
+                            </button>
+                            <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                              Billing history
+                            </button>
+                            <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                              Points earned
+                            </button>
+                            <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                              Reward redemptions
+                            </button>
+                            <button className="text-brand-600 hover:text-brand-700 text-sm font-medium underline">
+                              Maximize your ROI
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

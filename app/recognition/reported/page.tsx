@@ -22,23 +22,36 @@ export default function ReportedPage() {
   const reportedItems = [
     {
       id: '1',
-      type: 'Inappropriate Content',
-      reportedBy: 'Anonymous',
-      targetUser: 'John Smith',
-      content: 'Recognition post with inappropriate language',
-      date: '2 hours ago',
+      date: '11/01/2024',
+      name: 'Fla Silva',
+      message: 'Giveaways points for getting you 3rd shortlisted',
+      reportedBy: 'Amanda Godin',
       status: 'pending',
-      severity: 'medium'
+      severity: 'medium',
+      postContent: 'Great work on the project! Here are some bonus points for your excellent performance.',
+      reportReason: 'Inappropriate point distribution'
     },
     {
       id: '2',
-      type: 'Spam',
-      reportedBy: 'Sarah Wilson',
-      targetUser: 'Mike Johnson',
-      content: 'Multiple duplicate recognition posts',
-      date: '1 day ago',
-      status: 'resolved',
-      severity: 'low'
+      date: '11/01/2024', 
+      name: 'Fla Silva',
+      message: 'Giveaways points for getting you 3rd shortlisted',
+      reportedBy: 'Amanda Godin',
+      status: 'pending',
+      severity: 'medium',
+      postContent: 'Congratulations on making it to the final round! Keep up the great work.',
+      reportReason: 'Spam or duplicate content'
+    },
+    {
+      id: '3',
+      date: '11/06/2024',
+      name: 'Annual Security Training',
+      message: 'GO Giveaways points for completing their annual security awareness training',
+      reportedBy: 'Amanda Godin',
+      status: 'pending',
+      severity: 'low',
+      postContent: 'Successfully completed the mandatory security training with 100% score.',
+      reportReason: 'Automated point distribution issue'
     }
   ]
 
@@ -66,7 +79,7 @@ export default function ReportedPage() {
 
   return (
     <NotificationProvider>
-      <div className="flex h-screen bg-cherish-gray-50">
+      <div className="flex h-screen bg-primary-50">
         <Sidebar 
           isOpen={sidebarOpen} 
           onToggle={() => setSidebarOpen(!sidebarOpen)}
@@ -113,142 +126,82 @@ export default function ReportedPage() {
                   </p>
                 </div>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                  <div className="bg-white rounded-2xl p-6 shadow-soft border border-cherish-gray-200">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center">
-                        <ClockIcon className="w-6 h-6 text-amber-600" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-cherish-dark">1</div>
-                        <div className="text-sm text-cherish-gray-600">Pending Review</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-6 shadow-soft border border-cherish-gray-200">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
-                        <CheckCircleIcon className="w-6 h-6 text-green-600" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-cherish-dark">1</div>
-                        <div className="text-sm text-cherish-gray-600">Resolved</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-6 shadow-soft border border-cherish-gray-200">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center">
-                        <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-cherish-dark">0</div>
-                        <div className="text-sm text-cherish-gray-600">High Priority</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-6 shadow-soft border border-cherish-gray-200">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-cherish-yellow-light rounded-2xl flex items-center justify-center">
-                        <FlagIcon className="w-6 h-6 text-cherish-yellow-mono" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-cherish-dark">2</div>
-                        <div className="text-sm text-cherish-gray-600">Total Reports</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Tab Navigation */}
+                {/* Filter Dropdown */}
                 <div className="mb-6">
-                  <div className="flex space-x-1 bg-cherish-gray-100 p-1 rounded-2xl max-w-fit">
-                    {[
-                      { id: 'pending', name: 'Pending', count: 1 },
-                      { id: 'resolved', name: 'Resolved', count: 1 },
-                      { id: 'all', name: 'All Reports', count: 2 }
-                    ].map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center space-x-2 ${
-                          activeTab === tab.id
-                            ? 'bg-white text-cherish-dark shadow-soft'
-                            : 'text-cherish-gray-600 hover:text-cherish-dark hover:bg-white/50'
-                        }`}
-                      >
-                        <span>{tab.name}</span>
-                        <span className="bg-cherish-gray-300 text-cherish-gray-700 px-2 py-0.5 rounded-full text-xs">
-                          {tab.count}
-                        </span>
-                      </button>
-                    ))}
+                  <div className="flex items-center space-x-4">
+                    <label className="text-sm font-medium text-primary-700">Filter by:</label>
+                    <select 
+                      value={activeTab}
+                      onChange={(e) => setActiveTab(e.target.value)}
+                      className="form-select w-48"
+                    >
+                      <option value="all">All</option>
+                      <option value="pending">Pending</option>
+                      <option value="resolved">Resolved</option>
+                    </select>
                   </div>
                 </div>
 
-                {/* Reported Items */}
-                <div className="bg-white rounded-3xl border border-cherish-gray-200 shadow-soft">
-                  <div className="p-6 border-b border-cherish-gray-200">
-                    <h2 className="text-xl font-bold text-cherish-dark">Reported Items</h2>
-                    <p className="text-cherish-gray-600 mt-1">Review and moderate reported content</p>
+                {/* Reported Content Table */}
+                <div className="bg-white rounded-2xl border border-primary-200 shadow-soft overflow-hidden">
+                  <div className="p-6 border-b border-primary-200">
+                    <h2 className="text-xl font-bold text-primary-900">Reported Content</h2>
                   </div>
                   
-                  <div className="divide-y divide-cherish-gray-200">
+                  {/* Table Header */}
+                  <div className="bg-primary-50 px-6 py-3 border-b border-primary-200">
+                    <div className="grid grid-cols-12 gap-4 text-sm font-medium text-primary-700">
+                      <div className="col-span-2">Date</div>
+                      <div className="col-span-2">Name</div>
+                      <div className="col-span-4">Message</div>
+                      <div className="col-span-2">Recipient(s)</div>
+                      <div className="col-span-2">Approve or Deny</div>
+                    </div>
+                  </div>
+                  
+                  {/* Table Body */}
+                  <div className="divide-y divide-primary-200">
                     {filteredItems.map((item) => (
-                      <div key={item.id} className="p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-3 mb-3">
-                              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                                <FlagIcon className="w-5 h-5 text-red-600" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-cherish-dark">
-                                  {item.type}
-                                </div>
-                                <div className="text-sm text-cherish-gray-600">
-                                  Reported by {item.reportedBy} • {item.date}
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(item.severity)}`}>
-                                  {item.severity} priority
-                                </span>
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
-                                  {item.status}
-                                </span>
-                              </div>
+                      <div key={item.id} className="px-6 py-4 hover:bg-primary-50 transition-colors">
+                        <div className="grid grid-cols-12 gap-4 items-center">
+                          {/* Date */}
+                          <div className="col-span-2">
+                            <span className="text-sm text-primary-900">{item.date}</span>
+                          </div>
+                          
+                          {/* Name */}
+                          <div className="col-span-2">
+                            <span className="text-sm text-primary-900 font-medium">{item.name}</span>
+                          </div>
+                          
+                          {/* Message */}
+                          <div className="col-span-4">
+                            <div className="text-sm text-primary-900">{item.message}</div>
+                            <div className="text-xs text-primary-600 mt-1">
+                              Reported by: <span className="text-brand-600">{item.reportedBy}</span>
                             </div>
-                            
-                            <div className="bg-cherish-gray-50 rounded-2xl p-4 mb-4">
-                              <div className="flex items-center justify-between mb-2">
-                                <span className="font-medium text-cherish-dark">Target User:</span>
-                                <span className="text-cherish-gray-700">{item.targetUser}</span>
-                              </div>
-                              <div className="text-sm text-cherish-gray-700">
-                                <strong>Content:</strong> {item.content}
-                              </div>
+                            <div className="text-xs text-red-600 mt-1">
+                              Reason: {item.reportReason}
                             </div>
                           </div>
                           
-                          <div className="flex items-center space-x-2 ml-6">
-                            <button className="p-2 text-cherish-gray-500 hover:text-cherish-yellow-mono transition-colors rounded-xl hover:bg-cherish-gray-50">
-                              <EyeIcon className="w-5 h-5" />
-                            </button>
-                            {item.status === 'pending' && (
-                              <>
-                                <button className="px-4 py-2 bg-green-100 text-green-700 rounded-xl hover:bg-green-200 transition-colors font-medium text-sm">
-                                  Resolve
-                                </button>
-                                <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium text-sm">
-                                  Dismiss
-                                </button>
-                              </>
-                            )}
+                          {/* Recipients */}
+                          <div className="col-span-2">
+                            <span className="text-sm text-brand-600 hover:text-brand-700 cursor-pointer">
+                              {item.reportedBy}
+                            </span>
+                          </div>
+                          
+                          {/* Actions */}
+                          <div className="col-span-2">
+                            <div className="flex items-center space-x-2">
+                              <button className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm font-medium transition-colors">
+                                Remove Post
+                              </button>
+                              <button className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded text-sm font-medium transition-colors">
+                                Discard Report
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -257,13 +210,13 @@ export default function ReportedPage() {
                   
                   {filteredItems.length === 0 && (
                     <div className="p-12 text-center">
-                      <div className="w-16 h-16 bg-cherish-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
-                        <CheckCircleIcon className="w-8 h-8 text-cherish-gray-400" />
+                      <div className="w-16 h-16 bg-primary-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                        <CheckCircleIcon className="w-8 h-8 text-primary-400" />
                       </div>
-                      <h3 className="text-lg font-semibold text-cherish-dark mb-2">
+                      <h3 className="text-lg font-semibold text-primary-900 mb-2">
                         No Reports Found
                       </h3>
-                      <p className="text-cherish-gray-600">
+                      <p className="text-primary-600">
                         There are no reported items in this category.
                       </p>
                     </div>

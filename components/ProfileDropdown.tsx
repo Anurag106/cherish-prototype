@@ -10,6 +10,7 @@ import {
   SpeakerWaveIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline'
+import ColorfulAvatar from './ColorfulAvatar'
 
 interface ProfileDropdownProps {
   onNavigate?: (page: string) => void;
@@ -24,8 +25,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="w-10 h-10 bg-gradient-to-br from-cherish-yellow to-cherish-yellow-mono rounded-2xl flex items-center justify-center text-cherish-dark font-bold text-sm shadow-lg hover:scale-105 transition-transform cursor-pointer hover:shadow-xl">
-          BC
+        <Menu.Button className="hover:scale-105 transition-transform cursor-pointer">
+          <ColorfulAvatar name="Biplob Chakraborty" size="md" />
         </Menu.Button>
       </div>
 
@@ -38,19 +39,17 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right divide-y divide-cherish-gray-100 rounded-3xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-cherish-gray-200">
+        <Menu.Items className="absolute right-0 mt-2 w-72 origin-top-right divide-y divide-primary-100 rounded-3xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-primary-200">
           {/* Profile Header */}
           <div className="p-6">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-cherish-yellow to-cherish-yellow-mono rounded-2xl flex items-center justify-center text-cherish-dark font-bold text-xl shadow-lg">
-                BC
-              </div>
+              <ColorfulAvatar name="Biplob Chakraborty" size="xl" />
               <div>
-                <h3 className="text-lg font-bold text-cherish-dark">Biplob Chakraborty</h3>
-                <p className="text-sm text-cherish-gray-600">@biplob.chakraborty</p>
+                <h3 className="text-lg font-bold text-primary-900">Biplob Chakraborty</h3>
+                <p className="text-sm text-primary-600">@biplob.chakraborty</p>
                 <div className="flex items-center space-x-2 mt-2">
-                  <div className="w-2 h-2 bg-cherish-green rounded-full"></div>
-                  <span className="text-xs text-cherish-gray-500">Active now</span>
+                  <div className="w-2 h-2 bg-brand-500 rounded-full"></div>
+                  <span className="text-xs text-primary-500">Active now</span>
                 </div>
               </div>
             </div>
@@ -63,8 +62,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
                 <button
                   onClick={() => handleNavigation('profile')}
                   className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                    active ? 'bg-brand-50 text-primary-900' : 'text-primary-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-all duration-200 hover:scale-105`}
                 >
                   <UserIcon className="mr-3 h-5 w-5" />
                   View profile
@@ -77,8 +76,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
                 <button
                   onClick={() => handleNavigation('announcements')}
                   className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                    active ? 'bg-brand-50 text-primary-900' : 'text-primary-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-all duration-200 hover:scale-105`}
                 >
                   <SpeakerWaveIcon className="mr-3 h-5 w-5" />
                   Announcements
@@ -91,8 +90,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
                 <button
                   onClick={() => handleNavigation('bookmarks')}
                   className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                    active ? 'bg-brand-50 text-primary-900' : 'text-primary-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-all duration-200 hover:scale-105`}
                 >
                   <BookmarkIcon className="mr-3 h-5 w-5" />
                   Bookmarks
@@ -105,8 +104,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
                 <button
                   onClick={() => handleNavigation('profile-settings')}
                   className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                    active ? 'bg-brand-50 text-primary-900' : 'text-primary-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-all duration-200 hover:scale-105`}
                 >
                   <CogIcon className="mr-3 h-5 w-5" />
                   Profile settings
@@ -119,8 +118,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
                 <a
                   href="/admin"
                   className={`${
-                    active ? 'bg-cherish-yellow-light text-cherish-dark' : 'text-cherish-gray-700'
-                  } group flex items-center px-6 py-3 text-sm font-medium transition-colors`}
+                    active ? 'bg-brand-50 text-primary-900' : 'text-primary-700'
+                  } group flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 hover:scale-105`}
                 >
                   <ShieldCheckIcon className="mr-3 h-5 w-5" />
                   Admin settings
@@ -136,8 +135,8 @@ export default function ProfileDropdown({ onNavigate }: ProfileDropdownProps) {
                 <button
                   onClick={() => handleNavigation('logout')}
                   className={`${
-                    active ? 'bg-cherish-red-light/10 text-cherish-red' : 'text-cherish-gray-700'
-                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-colors`}
+                    active ? 'bg-red-50 text-red-600' : 'text-primary-700'
+                  } group flex w-full items-center px-6 py-3 text-sm font-medium transition-all duration-200 hover:scale-105`}
                 >
                   <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
                   Log out

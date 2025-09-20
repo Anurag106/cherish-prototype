@@ -44,7 +44,7 @@ export default function PeerToPeerPage() {
 
   return (
     <NotificationProvider>
-      <div className="flex h-screen bg-cherish-gray-50">
+      <div className="flex h-screen bg-primary-50">
         <Sidebar 
           isOpen={sidebarOpen} 
           onToggle={() => setSidebarOpen(!sidebarOpen)}
@@ -65,16 +65,15 @@ export default function PeerToPeerPage() {
                 <div className="mb-8 hidden lg:block">
                   <div className="flex items-center space-x-6 mb-6">
                     <div className="relative">
-                      <div className="w-16 h-16 bg-gradient-to-br from-cherish-yellow to-primary-500 rounded-3xl flex items-center justify-center shadow-medium">
-                        <TrophyIcon className="w-8 h-8 text-cherish-dark" />
+                      <div className="w-16 h-16 bg-brand-500 rounded-2xl flex items-center justify-center shadow-md hover:scale-105 transition-all duration-200">
+                        <TrophyIcon className="w-8 h-8 text-white" />
                       </div>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-cherish-yellow rounded-full animate-pulse"></div>
                     </div>
                     <div>
-                      <h1 className="text-4xl font-bold text-cherish-dark mb-2">
+                      <h1 className="text-4xl font-bold text-primary-900 mb-2">
                         Peer-to-Peer Recognition
                       </h1>
-                      <p className="text-xl text-cherish-gray-600">
+                      <p className="text-xl text-primary-600">
                         Set your monthly points allowance and give amounts for your peer-to-peer program
                       </p>
                     </div>
@@ -83,27 +82,27 @@ export default function PeerToPeerPage() {
 
                 {/* Mobile Header */}
                 <div className="mb-6 lg:hidden">
-                  <h1 className="text-2xl font-bold text-cherish-dark mb-2">
+                  <h1 className="text-2xl font-bold text-primary-900 mb-2">
                     Peer-to-Peer Recognition
                   </h1>
-                  <p className="text-cherish-gray-600">
+                  <p className="text-primary-600">
                     Configure your peer-to-peer recognition settings
                   </p>
                 </div>
 
                 {/* Tab Navigation */}
                 <div className="mb-8">
-                  <div className="flex space-x-1 bg-cherish-gray-100 p-1 rounded-2xl max-w-fit overflow-x-auto">
+                  <div className="flex space-x-1 bg-primary-100 p-1 rounded-2xl max-w-fit overflow-x-auto">
                     {tabs.map((tab) => {
                       const Icon = tab.icon
                       return (
                         <button
                           key={tab.id}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`px-4 lg:px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center space-x-2 whitespace-nowrap ${
+                          className={`px-4 lg:px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center space-x-2 whitespace-nowrap hover:scale-105 ${
                             activeTab === tab.id
-                              ? 'bg-white text-cherish-dark shadow-soft'
-                              : 'text-cherish-gray-600 hover:text-cherish-dark hover:bg-white/50'
+                              ? 'bg-white text-primary-900 shadow-sm'
+                              : 'text-primary-600 hover:text-primary-900 hover:bg-white/50'
                           }`}
                         >
                           <Icon className="w-4 h-4" />
@@ -116,7 +115,7 @@ export default function PeerToPeerPage() {
                 </div>
 
                 {/* Tab Content */}
-                <div className="bg-white rounded-3xl border border-cherish-gray-200 shadow-soft min-h-[600px]">
+                <div className="bg-white rounded-2xl border border-primary-200 shadow-sm min-h-[600px] hover:shadow-md transition-all duration-200">
                   <div className="p-6 lg:p-8">
                     <ActiveTabComponent />
                   </div>

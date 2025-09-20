@@ -122,7 +122,7 @@ export default function ProfileSettingsPage({ onBack }: ProfileSettingsPageProps
         allowance: 'remind me to use my recognition allowance',
         achievements: 'notify me when I receive a new achievement',
         comments: 'notify me of comments on posts I\'m involved with',
-        activityUpdate: 'inform me of interesting activity on Bonusly, including birthdays and work anniversaries',
+        activityUpdate: 'inform me of interesting activity on Cherish, including birthdays and work anniversaries',
         announcements: 'notify me about company announcements',
         flashPoints: 'notify me about Flash Points events'
       }).map(([key, label]) => (
